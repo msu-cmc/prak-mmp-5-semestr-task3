@@ -1,5 +1,13 @@
 from typing import (
-    Any, Dict, Generic, List, Optional, Type, TypeVar, Union, Unpack
+    Any,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+    Unpack
 )
 
 from pydantic import BaseModel
@@ -32,39 +40,6 @@ class BaseDAO(Generic[ModelType]):
 
     model: Type[ModelType]
     options: List[Any] = []
-
-    @classmethod
-    def _get_entity_name(cls) -> str:
-        """Получение имени сущности для сообщений об ошибках.
-
-        Используется для более понятного вывода имени таблицы
-        при возникновении ошибок.
-        """
-        return cls.model._tablename
-
-    @classmethod
-    @SessionManager.with_session()
-    async def count_number(
-        cls,
-        session: AsyncSession,
-        **filter_by: Unpack[Dict[str, Any]],
-    ) -> Optional[ModelType]:
-        """Подсчитывает количество записей в таблице, удовлетворяющих условиям.
-
-        Параметры:
-            session - асинхронная сессия SQLAlchemy.
-            filter_by - именованные параметры для фильтрации записей.
-        Возвращает:
-            Количество записей, удовлетворяющих условию.
-        """
-        count_query = (
-            select(func.count())
-            .select_from(cls.model)
-            .where(*[getattr(cls.model, k) == v for k, v in filter_by.items()])
-        )
-
-        result = await session.execute(count_query)
-        return result.scalar()
 
     @classmethod
     @SessionManager.with_session()
@@ -119,45 +94,6 @@ class BaseDAO(Generic[ModelType]):
 
     @classmethod
     @SessionManager.with_session(auto_commit=True)
-    async def create_many(
-        cls,
-        session: AsyncSession,
-        values_list: List[Dict[str, Any]],
-        returning: bool = True
-    ) -> Optional[List[ModelType]]:
-        """Массовое создание записей.
-
-        Параметры:
-            session - асинхронная сессия SQLAlchemy.
-            values_list - список словарей с данными для создания записей.
-            returning - если True, возвращает список созданных объектов.
-        Возвращает:
-            Список созданных объектов или количество созданных записей.
-        """
-        if not values_list:
-            if returning:
-                return []
-            else:
-                return
-
-        query = insert(cls.model)
-
-        if returning:
-            query = query.returning(cls.model).options(*cls.options)
-        else:
-            query = query.returning(cls.model.id)
-
-        result = await session.execute(query, values_list)
-        if returning:
-            created_objs = result.scalars().all()
-            if len(created_objs) != len(values_list):
-                raise NoResultFound
-            return created_objs
-        if len(result.scalars().all()) != len(values_list):
-            raise NoResultFound
-
-    @classmethod
-    @SessionManager.with_session(auto_commit=True)
     async def update(
         cls,
         session: AsyncSession,
@@ -204,95 +140,6 @@ class BaseDAO(Generic[ModelType]):
 
     @classmethod
     @SessionManager.with_session(auto_commit=True)
-    async def update_many(
-        cls,
-        session: AsyncSession,
-        values_list: List[Dict[str, Any]],
-        returning: bool = True
-    ) -> Optional[Union[int, List[ModelType]]]:
-        """
-        Массовое обновление записей с сохранением исходного порядка.
-
-        Если returning=True, обновление происходит батчами
-        (например, по 1000 записей),
-        для каждого батча сразу производится SELECT обновлённых записей
-        с сортировкой по порядковому номеру,
-        определяемому исходным списком.
-        Итоговый список – конкатенация результатов батчей.
-        """
-        if not values_list:
-            if returning:
-                return []
-            else:
-                return
-
-        for value in values_list:
-            if not value.get('id'):
-                raise
-
-        # Получаем все уникальные колонки для обновления из всех записей
-        update_columns = set().union(
-            *[item.keys() for item in values_list]
-        ) - {'id'}
-
-        # Формируем CTE для всех значений сразу
-        values_query = (
-            union_all(*[
-                select(*[
-                    literal(
-                        item.get(col),
-                        type_=cls.model.__table__.columns[col].type
-                    ).label(col)
-                    for col in ['id'] + list(update_columns)
-                ])
-                for item in values_list
-            ])
-            .cte('v')
-        )
-
-        # Выполняем обновление всех записей одним запросом
-        update_query = (
-            sqlalchemy_update(cls.model)
-            .where(cls.model.id == values_query.c.id)
-            .values({
-                col: getattr(values_query.c, col)
-                for col in update_columns
-            })
-        )
-
-        if returning:
-            update_query = (
-                update_query
-                .returning(cls.model)
-                .options(*cls.options)
-            )
-        else:
-            update_query = update_query.returning(cls.model.id)
-
-        result = await session.execute(update_query)
-
-        if returning:
-
-            updated_objects = result.scalars().all()
-
-            # Проверяем, что все записи были обновлены
-            if len(updated_objects) != len(values_list):
-                raise NoResultFound
-
-            ids = [item["id"] for item in values_list]
-
-            id_positions = {id_val: index for index, id_val in enumerate(ids)}
-
-            updated_objects = sorted(updated_objects,
-                                     key=lambda obj: id_positions.get(obj.id))
-
-            return updated_objects
-
-        if len(result.scalars().all()) != len(values_list):
-            raise NoResultFound
-
-    @classmethod
-    @SessionManager.with_session(auto_commit=True)
     async def delete(
         cls,
         session: AsyncSession,
@@ -320,42 +167,6 @@ class BaseDAO(Generic[ModelType]):
             return deleted_obj
 
         result.scalar_one()
-
-    @classmethod
-    @SessionManager.with_session(auto_commit=True)
-    async def delete_many(
-        cls,
-        session: AsyncSession,
-        ids: List[Union[int, str]],
-        returning: bool = True,
-    ) -> Optional[List[ModelType]]:
-        """Массовое удаление записей.
-
-        Параметры:
-            session - асинхронная сессия SQLAlchemy.
-            ids - список идентификаторов записей для удаления.
-            returning - если True, возвращает список удалённых объектов.
-        Возвращает:
-            Список удалённых объектов или количество удалённых записей.
-            Если количество удалённых записей не совпадает с ожидаемым,
-            выбрасывается исключение.
-        """
-        if not ids:
-            if returning:
-                return []
-        query = sqlalchemy_delete(cls.model).where(cls.model.id.in_(ids))
-        if returning:
-            query = query.returning(cls.model).options(*cls.options)
-        else:
-            query = query.returning(cls.model.id)
-        result = await session.execute(query)
-        if returning:
-            deleted_objs = result.scalars().all()
-            if len(deleted_objs) != len(ids):
-                raise NoResultFound
-            return deleted_objs
-        if len(result.scalars().all()) != len(ids):
-            raise NoResultFound
 
     @classmethod
     @SessionManager.with_session(auto_commit=False)
@@ -441,4 +252,3 @@ class BaseDAO(Generic[ModelType]):
             pages=total_pages,
             page_size=page_size
         )
-

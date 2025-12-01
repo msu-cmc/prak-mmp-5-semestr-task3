@@ -9,9 +9,9 @@ from src.schemas.config import get_db_url
 
 
 DATABASE_URL = os.getenv("DATABASE_URL", get_db_url())
+
 engine = create_async_engine(DATABASE_URL, poolclass=NullPool)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
-
 
 
 class Base(AsyncAttrs, DeclarativeBase):
