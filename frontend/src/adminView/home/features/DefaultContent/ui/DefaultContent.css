@@ -1,0 +1,15 @@
+.home-content__part {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.home-content__part-title {
+    color: var(--white-color);
+    font-weight: var(--font-normal-weight);
+}
+
+.home-content__part-content {
+    display: flex;
+    gap: 20px;
+}

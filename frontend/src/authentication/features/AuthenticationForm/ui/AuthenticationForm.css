@@ -1,0 +1,31 @@
+.authform-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    padding-top: 100px;
+    margin: 0 auto;
+}
+
+.auth-header {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    font-family: Main;
+    font-weight: var(--font-normal-weight);
+    color: var(--red-color);
+}
+
+.auth-btn {
+    color: var(--white-color) !important;
+    border: var(--white-border) !important;
+    width: 30%;
+    height: 40px;
+    transition: color 200ms, background-color 250ms;
+}
+
+.auth-btn:hover {
+    color: var(--red-color) !important;
+    border: var(--red-border) !important;
+}

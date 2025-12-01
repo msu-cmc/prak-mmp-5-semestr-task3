@@ -1,0 +1,9 @@
+.fp-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: var(--border-radius);
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--background-color);
+}

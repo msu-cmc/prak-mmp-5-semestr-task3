@@ -1,0 +1,11 @@
+/* Block */
+.akramfit-placeholder {
+    color: #212121;
+    border-radius: var(--border-radius);
+}
+
+/* Elements */
+.akramfit-placeholder__inner {
+    width: 100%;
+    height: 100%;
+}

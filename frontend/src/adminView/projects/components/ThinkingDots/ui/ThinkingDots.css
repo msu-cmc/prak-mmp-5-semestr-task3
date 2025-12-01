@@ -1,0 +1,98 @@
+.pd-chat__actions {
+    flex: 0 0 20%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.pd-chat:hover .pd-chat__actions,
+.pd-chat__actions.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.pd-iconbtn--delete {
+    width: 15px;
+    height: 15px;
+    fill: var(--red-color);
+}
+
+.pd-kebab {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    outline: none;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
+    color: var(--white-color);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pd-kebab:hover {
+    color: var(--red-color);
+}
+
+.pd-kebab:focus {
+    outline: none;
+}
+
+.pd-kebab:focus-visible {
+    outline: none;
+}
+
+.pd-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 180px;
+    padding: 6px;
+    background: #2b2b2b;
+    border: 1px solid #3a3a3a;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    z-index: 10;
+}
+
+.pd-menu__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--white-color);
+    font-size: var(--font-third-size);
+    cursor: pointer;
+    text-align: left;
+    line-height: 1;
+}
+
+.pd-menu__item:hover {
+    background: #3a3a3a;
+}
+
+.pd-menu__item.is-danger:hover {
+    background: #4a2e2e;
+}
+
+.pd-chat__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}

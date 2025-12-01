@@ -1,0 +1,71 @@
+.pd-newchat {
+    position: relative;
+    min-height: 100%;
+    overflow: hidden;
+}
+
+.pd-newchat__center {
+    padding: var(--border-radius);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(960px, calc(100% - 24px));
+    transition: top .45s ease, transform .45s ease;
+}
+
+.pd-newchat.is-sending .pd-newchat__center {
+    top: calc(100% - var(--composer-h) - 8px);
+    transform: translate(-50%, 0);
+}
+
+.pd-newchat__ghost {
+    position: absolute;
+    left: 50%;
+    top: calc(50% - (var(--composer-h, 48px) / 2) - 18px);
+    transform: translate(-50%, -100%);
+    max-width: min(820px, 90%);
+    padding: 10px 12px;
+    border-radius: 14px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--white-color);
+    background: rgba(255,255,255,0.10);
+    transition: top .45s ease, transform .45s ease, opacity .45s ease;
+    pointer-events: none;
+}
+
+.pd-newchat.is-sending .pd-newchat__ghost {
+    top: 8px;
+    transform: translate(-50%, 0);
+    opacity: 0;
+}
+
+.pd-newchat__phrase {
+    position: absolute;
+    left: 50%;
+    top: calc(50% - (var(--composer-h, 48px) / 2) - 80px);
+    transform: translate(-50%, -100%);
+    color: var(--white-color);
+    font-size: var(--font-second-size);
+    text-align: center;
+    width: 100%;
+    max-width: min(960px, calc(100% - 24px));
+    padding: 0 12px;
+    box-sizing: border-box;
+    opacity: .75;
+    pointer-events: none;
+    transition: opacity .3s ease;
+}
+
+.pd-newchat.is-sending .pd-newchat__phrase {
+    opacity: .3;
+}
+
+.pd-newchat__hint {
+    margin-top: 8px;
+    color: var(--red-color);
+    font-size: 14px;
+    text-align: center;
+}

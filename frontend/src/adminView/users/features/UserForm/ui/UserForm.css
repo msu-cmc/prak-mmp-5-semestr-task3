@@ -1,0 +1,17 @@
+.user-form__container{
+    width: 50%;
+    min-width: 50%;
+    height: auto;
+    gap: 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    margin-bottom: 3vh;
+}
+
+.form-user-input-container{
+    width: 100%;
+    max-width: 100%;
+    font-weight: var(----font-small-weight) !important;
+}

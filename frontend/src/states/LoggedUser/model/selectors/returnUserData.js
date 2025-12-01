@@ -1,0 +1,1 @@
+export const returnLoggedUser = (state) => state.loggedUser.loggedUser

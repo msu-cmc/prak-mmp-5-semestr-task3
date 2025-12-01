@@ -1,0 +1,31 @@
+.users-content {
+    overflow-y: auto;
+}
+
+.users-content__controls{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20%;
+    margin-bottom: 3vh;
+}
+
+.users-content__controls__control--input,
+.users-content__controls__control--select,
+.users-content__controls__control--button {
+    width: 100% !important;
+    height: 5vh !important; 
+    font-size: var(--font-second-size) !important;
+    font-weight: var(--font-small-weight) !important;
+}
+
+.users-content__body{
+    display: flex;
+    flex-direction: column;
+}
+
+.users-content__controls__control--select .akramfit-select__control {
+    height: 5vh !important;
+    padding: 0 0.5em !important;
+}

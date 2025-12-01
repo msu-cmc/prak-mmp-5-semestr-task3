@@ -1,0 +1,89 @@
+@import url("reset.css");
+.app {
+    font-family: Main;
+    overflow: hidden;
+}
+
+.content {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 2vw 4vw;
+    background-color: var(--background-color);
+}
+
+.content__title {
+    width: 100%;
+    text-align: center;
+    color: var(--red-color);
+    font-size: 3.2vh;
+    font-weight: var(--font-normal-weight);
+    margin: 4vh 0 3vh;
+}
+
+.content__main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-footer>* {
+    margin: 0px;
+}
+
+.modal-2-btn-footer{
+    padding: 0px 10% 30px 10%;
+    display: flex; 
+    gap: 50px
+}
+
+.my-modal-body-side-padding{
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+:root {
+    overflow: hidden;
+    --primary-color: #000000;
+    --background-color: #181818;
+    --white-color: #FFFFFF;
+    --white-color-dark: #aeadad;
+    --red-color: #FF266B;
+    --light-yellow-color: #ffedd0;
+    --yellow-color: #e39a2d;
+    --light-grey-color: #c4c7cd;
+    --form-gap: 20px;
+    
+    --font-first-size: 24px;
+    --font-second-size: 18px;
+    --font-third-size: 14px;
+
+    --font-normal-weight: 250;
+    --font-small-weight: 200;
+
+    --red-border: 1px solid var(--red-color);
+    --primary-border: 1px solid var(--primary-color);
+    --white-border: 1px solid #6d6d6d;
+
+    --big-navbar-size: clamp(140px, 14vw, 230px);
+    --small-navbar-size: clamp(60px, 5vw, 90px);
+
+    --border-radius: 15px;
+}
+
+@font-face {
+    font-family: Main;
+    src: url(../../shared/assets/fonts/Montserrat/Montserrat-VariableFont_wght.ttf)
+        format("truetype-variations");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}

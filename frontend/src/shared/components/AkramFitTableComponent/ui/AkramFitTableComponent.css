@@ -1,0 +1,40 @@
+/* Block */
+.akramfit-table {
+    color: var(--red-color);
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Elements */
+.akramfit-table__head {
+    border-bottom: var(--red-border);
+}
+
+.akramfit-table__body {
+
+}
+
+.akramfit-table__row {
+    border-bottom: var(--red-border);
+    height: 1px;
+}
+
+.akramfit-table__row--head {
+    border-bottom: var(--red-border);
+}
+
+.akramfit-table__cell {
+    height: inherit;
+    padding: 6px 8px;
+}
+
+.akramfit-table__cell--head {
+    font-weight: var(--font-normal-weight);
+}
+
+/* Actions (можно вынести в отдельный компонент) */
+.akramfit-table__actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}

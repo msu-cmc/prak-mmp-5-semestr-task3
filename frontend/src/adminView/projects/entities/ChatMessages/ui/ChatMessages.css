@@ -1,0 +1,97 @@
+.pd-msgs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    overflow: auto;
+    padding-right: 2px;
+    padding-bottom: 88px;
+}
+
+.pd-msg {
+    display: flex;
+    width: 100%;
+}
+
+.pd-msg.is-user {
+    justify-content: flex-end;
+}
+
+.pd-msg.is-llm {
+    justify-content: flex-start;
+}
+
+.pd-msg__bubble {
+    background: rgba(255,255,255,0.06);
+    border: none;
+    border-radius: 14px;
+    color: var(--white-color);
+    line-height: 1.45;
+    max-width: min(820px, 90%);
+    padding: 10px 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.pd-msg.is-user .pd-msg__bubble {
+    background: rgba(255,255,255,0.10);
+}
+
+.pd-msg.is-llm .pd-msg__bubble {
+    background: rgba(255,255,255,0.06);
+}
+
+.pd-msg.is-pending .pd-msg__bubble {
+    opacity: .7;
+}
+
+.pd-msg.is-thinking .pd-msg__bubble {
+    font-style: italic;
+}
+
+.pd-msg.is-error .pd-msg__bubble {
+    outline: 1px solid #ff4d4f;
+}
+
+.pd-thinking {
+    align-items: baseline;
+    display: inline-flex;
+    gap: 6px;
+}
+
+.pd-thinking__text {
+    animation: pd-fade-in 240ms ease;
+}
+
+.pd-thinking__dots {
+    display: inline-block;
+    min-width: 24px;
+}
+
+@keyframes pd-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pd-typing {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.pd-caret {
+    display: inline-block;
+    width: 0.6ch;
+    margin-left: 1px;
+    animation: pd-caret-blink 1s steps(2, start) infinite;
+}
+
+@keyframes pd-caret-blink {
+    0%, 50% { opacity: 1; }
+    50.1%, 100% { opacity: 0; }
+}

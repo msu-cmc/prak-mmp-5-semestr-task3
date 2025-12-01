@@ -1,0 +1,55 @@
+.big-navbar__logo-icon-container,
+.big-navbar__top-icon-container,
+.big-navbar__icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.big-navbar__top-icon-container > div:only-child,
+.big-navbar__icon-container > div:only-child {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    height: 100%;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.big-navbar__logo {
+    max-width: 80%;
+    width: auto;
+    height: 100%;
+}
+
+.big-navbar__icon-wrapper {
+    min-width: 25%;
+    width: 25%;
+    height: 100%;
+}
+
+.big-navbar__icon {
+    text-align: center;
+}
+
+.big-navbar__icon-text-wrapper {
+    font-family: Main;
+    color: var(--white-color);
+    font-size: var(--font-second-size);
+    font-weight: var(--font-normal-weight) !important;
+    flex-grow: 1;
+    text-align: start;
+}
+
+.big-navbar__active-style::after {
+    width: 100%;
+}
+
+.exit-icon path {
+    fill: var(--red-color) !important;
+}
+
+.big-navbar__icon-text-wrapper {
+    white-space: nowrap;
+}

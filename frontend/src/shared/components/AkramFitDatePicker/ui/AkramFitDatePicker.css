@@ -1,0 +1,40 @@
+/* Block */
+.akramfit-date-picker {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Elements */
+.akramfit-date-picker__label {
+    color: var(--red-color);
+    font-family: Main;
+    font-weight: var(--font-normal-weight);
+    margin-bottom: 4px;
+}
+
+.akramfit-date-picker__input {
+    border: var(--primary-border);
+    width: 100%;
+    padding-left: 7px;
+    height: 5vh;
+    font-family: Main;
+    color: var(--red-color);
+    transition: border 0.2s ease-in-out;
+}
+
+.akramfit-date-picker__input:hover {
+    border: var(--red-border);
+}
+
+.akramfit-date-picker__error {
+    color: var(--red-color);
+    font-size: var(--font-third-size);
+    font-weight: var(--font-normal-weight);
+    margin-top: 2px;
+}
+
+/* Modifiers */
+.akramfit-date-picker__input--disabled {
+    background-color: #e9ecef;
+}

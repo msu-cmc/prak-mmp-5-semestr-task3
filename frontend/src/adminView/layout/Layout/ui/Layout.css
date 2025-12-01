@@ -1,0 +1,58 @@
+.layout {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+.layout--top {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.layout__sidebar {
+    padding: none;
+    min-width: 4vw;
+    display: flex;
+    flex-direction: column;
+    z-index: 6;
+    height: 100%;
+    overflow: hidden;
+    background-color: #101010;
+    transition-property: width;
+    transition-duration: 500ms;
+}
+
+.layout__children {
+    position: absolute;
+    height: 100%;
+    overflow: hidden;
+    transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
+}
+
+.layout__children--full {
+    padding-top: 0!important;
+    position: relative;
+    left: 0;
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar--open {
+    width: var(--big-navbar-size);
+}
+
+.sidebar--close {
+    width: var(--small-navbar-size);
+}
+
+.children--open  {
+    left: var(--big-navbar-size);
+    width: calc(100vw - var(--big-navbar-size));
+}
+
+.children--close {
+    left: var(--small-navbar-size);
+    width: calc(100vw - var(--small-navbar-size));
+}

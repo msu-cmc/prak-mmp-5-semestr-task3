@@ -1,0 +1,192 @@
+.filedz {
+    width: 100%;
+    max-width: 100%;
+    font-weight: var(--font-small-weight);
+}
+
+.filedz__label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--red-color);
+    font-size: var(--font-third-size);
+    font-weight: var(--font-small-weight);
+}
+
+.filedz__input {
+    display: none;
+}
+
+.filedz__drop {
+    position: relative;
+    width: 100%;
+    min-height: 110px;
+    border: var(--white-border);
+    border-style: dashed;
+    border-radius: var(--border-radius);
+    background-color: var(--background-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    padding: 18px;
+    transition: border-color .2s, box-shadow .2s, background-color .2s;
+    color: var(--white-color);
+    overflow: hidden;
+}
+
+.filedz__drop:has(.filedz__file) {
+    border: var(--red-border);
+    border-style: solid;
+    background-color: rgba(255, 0, 92, .08);
+}
+
+.filedz__drop--active {
+    border: var(--red-border);
+    box-shadow: 0 0 0 2px rgba(255, 0, 92, .25);
+}
+
+.filedz__drop--disabled {
+    opacity: .5;
+    pointer-events: none;
+}
+
+.filedz__placeholder {
+    display: grid;
+    gap: 6px;
+    font-size: var(--font-third-size);
+}
+
+.filedz__or {
+    opacity: .6;
+    font-size: calc(var(--font-third-size) - 1px);
+}
+
+.filedz__action {
+    color: var(--red-color);
+}
+
+.filedz__file {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, .05);
+    border-radius: calc(var(--border-radius) / 1.5);
+}
+
+.filedz__meta {
+    overflow: hidden;
+    flex: 1;
+}
+
+.filedz__name {
+    display: block;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: var(--white-color);
+    font-weight: 500;
+}
+
+.filedz__name::before {
+    content: "📄 ";
+    margin-right: 6px;
+}
+
+.filedz__size {
+    display: block;
+    margin-top: 4px;
+    opacity: .7;
+    font-size: calc(var(--font-third-size) - 2px);
+    color: var(--red-color);
+}
+
+.filedz__remove {
+    border: var(--white-border);
+    background: transparent;
+    color: var(--white-color);
+    border-radius: calc(var(--border-radius) / 1.5);
+    padding: 6px 10px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color .2s, color .2s, background-color .2s;
+    font-size: 18px;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filedz__remove:hover {
+    border: var(--red-border);
+    color: var(--red-color);
+    background-color: rgba(255, 0, 92, .1);
+}
+
+.filedz__remove:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.filedz__error {
+    margin-top: 8px;
+    color: var(--red-color);
+    font-size: calc(var(--font-third-size) - 2px);
+}
+
+/* Loading overlay */
+.filedz__loading {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .55);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: var(--border-radius);
+    padding: 16px;
+}
+
+.filedz__bar {
+    width: 80%;
+    max-width: 480px;
+    height: 8px;
+    background: rgba(255, 255, 255, .2);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.filedz__fill {
+    height: 100%;
+    width: 0%;
+    background: var(--red-color);
+    transition: width .2s ease;
+}
+
+.filedz__text {
+    color: var(--white-color);
+    font-size: calc(var(--font-third-size) - 1px);
+}
+
+.filedz__cancel {
+    border: var(--white-border);
+    background: transparent;
+    color: var(--white-color);
+    border-radius: calc(var(--border-radius) / 1.5);
+    padding: 6px 10px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color .2s, color .2s, background-color .2s;
+}
+
+.filedz__cancel:hover {
+    border: var(--red-border);
+    color: var(--red-color);
+}

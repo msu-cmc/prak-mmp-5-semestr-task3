@@ -1,0 +1,45 @@
+.home-card {
+    width: 100%;
+    cursor: pointer;
+}
+
+.home-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.home-card__header {
+    display: flex;
+    align-items: center;
+}
+
+.home-card__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.home-card__title svg path{
+    fill: var(--white-color);
+    transition: fill 350ms;
+}
+
+.home-card__icon {
+    width: 2vh;
+    height: 2vh;
+}
+
+.home-card__name {
+    color: var(--white-color-dark);
+    flex: 1;
+    font-weight: var(--font-normal-weight);
+    font-size: var(--font-second-size);
+}
+
+.home-card__text {
+    color: var(--white-color-dark);
+    font-weight: var(--font-normal-weight);
+    font-size: var(--font-third-size)
+}

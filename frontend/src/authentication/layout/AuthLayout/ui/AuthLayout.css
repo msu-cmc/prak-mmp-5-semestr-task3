@@ -1,0 +1,22 @@
+.authlayout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--primary-color);
+}
+
+.logo-auth {
+    width: 15vw;
+    height: auto;
+    align-self: flex-start;
+    margin-left: 40px;
+    margin-top: 40px;
+}
+
+.authlayout-content {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

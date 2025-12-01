@@ -1,0 +1,41 @@
+.projects-content {
+    overflow-y: auto;
+}
+
+.projects-content__controls{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20%;
+    margin-bottom: 3vh;
+}
+
+.projects-content__controls__control--input,
+.projects-content__controls__control--select,
+.projects-content__controls__control--button {
+    width: 100% !important;
+    height: 5vh !important;
+    font-size: var(--font-second-size) !important;
+    font-weight: var(--font-small-weight) !important;
+}
+
+.projects-content__body{
+    display: flex;
+    flex-direction: column;
+}
+
+.projects-content__controls__control--select .akramfit-select__control {
+    height: 5vh !important;
+    padding: 0 0.5em !important;
+}
+
+.projects-content--nothing {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    color: var(--white-color);
+    opacity: 0.4;
+    margin-top: 10vh;
+}

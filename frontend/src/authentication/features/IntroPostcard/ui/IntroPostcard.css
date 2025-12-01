@@ -1,0 +1,59 @@
+.intro-overlay {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: var(--primary-color);
+    opacity: 1;
+    z-index: 9999;
+}
+
+.intro-overlay--autoexit {
+    animation: overlay-out var(--exit-ms) ease forwards;
+    animation-delay: calc(var(--fade-ms) + var(--reveal-ms) + var(--hold-ms));
+}
+
+.intro-card {
+    display: grid;
+    place-items: center;
+    width: min(520px, 90vw);
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+    will-change: opacity, transform, clip-path;
+}
+
+.intro-img {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: auto;
+    user-select: none;
+    pointer-events: none;
+}
+
+.intro-single {
+    opacity: 0;
+    transform: scale(0.96);
+    clip-path: inset(0 100% 0 0);
+    -webkit-clip-path: inset(0 100% 0 0);
+    animation:
+        single-fade var(--fade-ms) ease forwards,
+        single-reveal var(--reveal-ms) var(--delay) ease forwards;
+}
+
+@keyframes single-fade {
+    from { opacity: 0; transform: scale(0.96); filter: blur(2px); }
+    to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+@keyframes single-reveal {
+    from { clip-path: inset(0 100% 0 0); -webkit-clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); -webkit-clip-path: inset(0 0 0 0); }
+}
+
+@keyframes overlay-out {
+    to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-single { animation: none; opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
+    .intro-overlay--autoexit { animation: none; }
+}

@@ -1,0 +1,80 @@
+.user-card {
+    display: flex;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: var(--white-color);
+    border-radius: var(--border-radius) !important;
+}
+
+.user-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.user-card__row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.user-card__row--title {
+    margin-bottom: 12px;
+}
+
+.user-card__title {
+    font-size: var(--font-first-size);
+    color: var(--white-color);
+    font-weight: var(--font-normal-weight);
+}
+
+.user-card__info-label {
+    font-size: var(--font-third-size);
+    font-weight: var(--font-normal-weight);
+    color: var(--red-color);
+    margin-right: 5px;
+    flex: 0 0 auto;
+}
+
+.user-card__info-value {
+    font-size: var(--font-third-size);
+    font-weight: var(--font-normal-weight);
+    color: var(--white-color);
+    flex: 1 1 auto;
+}
+
+.user-card__actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 0 0 auto;
+}
+
+.user-card__action-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    fill: var(--primary-color);
+}
+
+.user-card__action-icon--delete {
+    fill: var(--red-color);
+}
+
+.user-card__action-icon--edit{
+    width: 25px;
+    height: 25px;
+    fill: var(--white-color) !important;
+}
+
+.user-card__action-icon--delete{
+    width: 25px;
+    height: 25px;
+    fill: var(--red-color) !important;
+}
+
+.user-card__action-icon--edit:hover{
+    fill: white !important;
+}

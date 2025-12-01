@@ -1,0 +1,38 @@
+.pd-composer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin-top: 14px;
+    align-items: center;
+}
+
+.pd-composer__sendbtn {
+    border: var(--white-border);
+    background: transparent;
+    color: var(--white-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color .2s, transform .2s, background-color .2s, border-color .2s;
+    align-self: center;
+    line-height: 0;
+}
+
+.pd-composer__sendbtn:hover {
+    color: var(--red-color);
+    transform: translateY(-1px);
+}
+
+.pd-composer__sendbtn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pd-composer__sendbtn > svg {
+    display: block;
+}

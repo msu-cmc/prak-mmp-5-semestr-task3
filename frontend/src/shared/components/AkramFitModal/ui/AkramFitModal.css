@@ -1,0 +1,69 @@
+/* Block */
+.akramfit-modal {
+    width: 65%;
+    min-width: 55%;
+    margin: auto;
+}
+
+/* Elements */
+.akramfit-modal__content {
+    background-color: #272727;
+    border: var(--white-border);
+    border-radius: var(--border-radius);
+}
+
+.akramfit-modal__backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.akramfit-modal__header {
+    background-color: #272727;
+    border-bottom: var(--white-border);
+    padding: 1.5rem;
+}
+
+.akramfit-modal__title {
+    width: 100%;
+    text-align: center;
+    color: var(--red-color);
+    font-family: Main;
+    font-size: var(--font-first-size);
+    font-weight: var(--font-small-weight);
+}
+
+.akramfit-modal__body {
+    background-color: #272727;
+    color: var(--white-color);
+    padding: 2vh 4vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 20vh;
+}
+
+.akramfit-modal__text {
+    font-size: var(--font-first-size);
+    font-weight: var(--font-small-weight);
+    width: 100%;
+    color: var(--red-color);
+    text-align: center;
+}
+
+.akramfit-modal__footer {
+    background-color: #272727;
+    border-top: var(--white-border);
+    display: flex;
+    gap: 2vw;
+    padding: 1rem;
+}
+
+.akramfit-modal__button {
+    flex: 1;
+    height: 5vh;
+}
+
+/* Modifiers */
+.akramfit-modal__button--submit {
+    background-color: var(--red-color);
+}

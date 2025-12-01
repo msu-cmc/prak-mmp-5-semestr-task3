@@ -1,0 +1,6 @@
+/* Block */
+.akramfit-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent 0%, lightgrey 40%, lightgrey 60%, transparent 100%);
+    width: 100%;
+}

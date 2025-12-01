@@ -1,0 +1,29 @@
+.small-navbar__logo-icon-container,
+.small-navbar__top-icon-container,
+.small-navbar__icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.small-navbar__icon{
+    height: 100%;
+}
+
+.small-navbar__top-icon-container,
+.small-navbar__icon-container {
+    padding: 5px 0;
+}
+
+.small-navbar__active-style::after {
+    width: 60%;
+}
+
+.exit-icon path {
+    fill: var(--red-color) !important;
+}
+
+.small-navbar__icon-logo {
+    width: 80%;
+}

@@ -1,0 +1,84 @@
+/* Block */
+.akramfit-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Modifiers - Размеры */
+.akramfit-toggle--sm .akramfit-toggle__track { width: 40px; height: 22px; }
+.akramfit-toggle--sm .akramfit-toggle__track::after { width: 16px; height: 16px; top: 3px; left: 3px; transform: translateX(0); }
+.akramfit-toggle--md .akramfit-toggle__track { width: 48px; height: 28px; }
+.akramfit-toggle--md .akramfit-toggle__track::after { width: 22px; height: 22px; top: 3px; left: 3px; transform: translateX(0); }
+.akramfit-toggle--lg .akramfit-toggle__track { width: 60px; height: 34px; }
+.akramfit-toggle--lg .akramfit-toggle__track::after { width: 26px; height: 26px; top: 4px; left: 4px; transform: translateX(0); }
+
+/* Elements */
+.akramfit-toggle__label {
+    font-size: var(--font-third-size);
+    font-weight: var(--font-normal-weight);
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+/* Базовые цвета (можно переопределить) */
+:root {
+    --toggle-off-bg: rgba(0, 2, 39, 0.18);
+    --toggle-on-bg: var(--red-color);
+    --toggle-thumb-bg: var(--white-color);
+    --toggle-focus-outline: rgba(230, 61, 36, 0.35);
+}
+
+.akramfit-toggle__input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: inherit;
+}
+
+.akramfit-toggle__track {
+    position: relative;
+    display: inline-block;
+    border-radius: 9999px;
+    background: var(--toggle-off-bg);
+    transition: background 0.2s ease;
+    flex: 0 0 auto;
+}
+
+.akramfit-toggle__track::after {
+    content: "";
+    position: absolute;
+    border-radius: var(--border-radius);
+    background: var(--toggle-thumb-bg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    transition: transform 0.2s ease;
+}
+
+/* States */
+.akramfit-toggle__input:checked + .akramfit-toggle__track {
+    background: var(--toggle-on-bg);
+}
+.akramfit-toggle--sm .akramfit-toggle__input:checked + .akramfit-toggle__track::after {
+    transform: translateX(18px);
+}
+.akramfit-toggle--md .akramfit-toggle__input:checked + .akramfit-toggle__track::after {
+    transform: translateX(20px);
+}
+.akramfit-toggle--lg .akramfit-toggle__input:checked + .akramfit-toggle__track::after {
+    transform: translateX(26px);
+}
+
+.akramfit-toggle__input:focus-visible + .akramfit-toggle__track {
+    outline: 3px solid var(--toggle-focus-outline);
+    outline-offset: 2px;
+}
+
+/* Modifiers - Disabled */
+.akramfit-toggle--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

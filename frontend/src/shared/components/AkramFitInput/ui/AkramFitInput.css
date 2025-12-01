@@ -1,0 +1,56 @@
+/* Block */
+.akramfit-input {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: var(--border-radius);
+    align-self: center;
+}
+
+/* Elements */
+
+.akramfit-input__label {
+    color: var(--red-color) !important;
+    font-size: var(--font-second-size) !important;
+    font-weight: var(--font-small-weight);
+    margin-bottom: 4px;
+}
+
+.akramfit-input__form {
+    width: 100%;
+    background-color: var(--background-color) !important;
+    border: var(--white-border);
+    border-radius: var(--border-radius);
+    height: 40px;
+    color: var(--white-color) !important;
+    font-weight: var(--font-small-weight);
+    font-size: var(--font-third-size);
+    box-shadow: none;
+    transition: border 200ms;
+}
+
+.akramfit-input__form:hover,
+.akramfit-input__form:focus,
+.akramfit-input__form:focus-visible {
+    border: var(--red-border);
+    outline: none;
+    box-shadow: none;
+}
+
+.akramfit-input__form::placeholder {
+    font-weight: var(--font-small-weight);
+    color: var(--white-color) !important;
+}
+
+textarea.akramfit-input__form {
+    min-height: 40px;
+    max-height: 150px;
+    resize: none;
+    overflow: hidden;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+}

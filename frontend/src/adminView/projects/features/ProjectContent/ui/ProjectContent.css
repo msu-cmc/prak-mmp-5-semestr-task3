@@ -1,0 +1,20 @@
+.pd-grid {
+    --sidebar-w: 280px;
+    --chat-w-fixed: 45% !important;
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr 40%;
+    gap: 16px;
+    padding: 12px 16px;
+    transition: grid-template-columns .45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: grid-template-columns;
+}
+
+.pd-grid.is-collapsed {
+    grid-template-columns: 0 var(--chat-w-fixed) 1fr;
+}
+
+.pd-viewer {
+    min-width: 0;
+    display: grid;
+    transition: width .45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}

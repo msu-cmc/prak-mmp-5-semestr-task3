@@ -1,0 +1,18 @@
+/* Block */
+.akramfit-card {
+    background-color: #212121;
+    display: flex;
+    border: var(--white-border);
+    padding: 10px 15px;
+    min-height: 40px;
+    font-size: var(--font-third-size);
+    width: 100%;
+    transition: border 300ms ease;
+    border-radius: var(--border-radius);
+}
+
+/* States */
+.akramfit-card:hover {
+    border: 1px solid white;
+    transition: border 1000ms ease;
+}

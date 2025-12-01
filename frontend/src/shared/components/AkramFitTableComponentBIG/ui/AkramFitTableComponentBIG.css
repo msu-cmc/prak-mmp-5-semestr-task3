@@ -1,0 +1,38 @@
+/* Block */
+.akramfit-table-big {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Elements */
+.akramfit-table-big__head {
+    border-bottom: var(--red-border);
+}
+
+.akramfit-table-big__body {
+
+}
+
+.akramfit-table-big__row {
+    border-bottom: var(--red-border);
+}
+
+.akramfit-table-big__row:last-child {
+    border-bottom: none;
+}
+
+.akramfit-table-big__row--head {
+
+}
+
+.akramfit-table-big__cell {
+    padding: 6px 8px;
+    text-align: center;
+    color: var(--red-color);
+    border: none;
+    vertical-align: middle;
+}
+
+.akramfit-table-big__cell--head {
+    font-weight: var(--font-normal-weight);
+}

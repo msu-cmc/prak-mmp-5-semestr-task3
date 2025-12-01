@@ -1,0 +1,162 @@
+.pd-pane {
+    height: 100%;
+    transition: background-color .3s ease;
+}
+
+.pd-pane__header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--white-border);
+    border-radius: var(--border-radius);
+    font-size: var(--font-second-size);
+    height: 40px;
+    padding: 8px 12px;
+    color: var(--white-color);
+}
+
+.pd-pane__title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pd-pane__body {
+    background: #232323;
+    height: 100%;
+    border-radius: var(--border-radius);
+    padding: var(--border-radius);
+}
+
+.file-input-hidden{
+    display: none;
+}
+
+.file-drop{
+    width: 100%;
+    height: 100%;
+    border: var(--white-border);
+    padding: var(--border-radius);
+    border-style: dashed;
+    border-radius: var(--border-radius);
+    background-color: var(--background-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: border-color .2s, box-shadow .2s, background-color .2s;
+    color: var(--white-color);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.file-drop--active{
+    border: var(--red-border);
+    box-shadow: 0 0 0 2px rgba(255, 0, 92, .25);
+}
+
+.file-drop__placeholder{
+    display: grid;
+    gap: 6px;
+    font-size: var(--font-third-size);
+}
+
+.file-drop__or{
+    opacity: .6;
+    font-size: calc(var(--font-third-size) - 1px);
+}
+
+.file-drop__action{
+    color: var(--red-color);
+}
+
+.pd-loading.pd-loading--overlay{
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(0,0,0,.3);
+    gap: 10px;
+}
+
+.pd-loading__bar{
+    width: 60%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.15);
+    overflow: hidden;
+}
+
+.pd-loading__fill{
+    height: 100%;
+    background: var(--red-color);
+    transition: width .15s linear;
+}
+
+.pd-loading__text{
+    color: var(--white-color);
+    font-size: var(--font-third-size);
+}
+
+.pd-pane__footer{
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--white-color);
+    margin-top: 12px;
+    gap: 20px;
+    min-height: 40px;
+    font-size: var(--font-third-size);
+}
+
+.pd-pane__fileinfo{
+    display: flex;
+    width: auto;
+    height: 40px;
+    padding: 0 20px;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    border: var(--white-border);
+    border-radius: var(--border-radius);
+}
+
+.pd-pane__filename{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 60vw;
+}
+
+.pd-pane__filesize{
+    opacity: .7;
+    font-size: calc(var(--font-third-size) - 2px);
+}
+
+.pd-viewer-wrap {
+    width: 100%;
+    border-radius: var(--border-radius) !important;
+    height: calc(100% - 4vh - var(--border-radius));
+    flex: 1 1 auto;
+    min-height: 0;
+    transition: background-color 0.3s ease;
+    overflow: hidden;
+}
+
+.pd-viewer-wrap--light {
+    background-color: #ffffff;
+}
+
+.pd-viewer-wrap--dark {
+    background-color: #232323;
+}
+
+.ifc-viewer {
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}

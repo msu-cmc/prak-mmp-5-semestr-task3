@@ -1,0 +1,70 @@
+/* Block */
+.akramfit-deletion-modal {
+    width: 65%;
+    min-width: 55%;
+    height: 90%;
+    min-height: 90%;
+}
+
+/* Elements */
+.akramfit-deletion-modal__content {
+    background-color: #272727;
+    border: var(--white-border);
+    border-radius: var(--border-radius);
+}
+
+.akramfit-deletion-modal__backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.akramfit-deletion-modal__header {
+    width: 100%;
+    background-color: #272727;
+    border-bottom: var(--white-border);
+    padding: 1.5rem;
+}
+
+.akramfit-deletion-modal__title {
+    width: 100%;
+    text-align: center;
+    color: var(--red-color);
+    font-family: Main;
+    font-size: var(--font-first-size);
+    font-weight: var(--font-small-weight);
+}
+
+.akramfit-deletion-modal__body {
+    width: 100%;
+    padding: 2vh 4vh;
+    background-color: #272727;
+    color: var(--white-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.akramfit-deletion-modal__text {
+    font-family: Main;
+    font-size: var(--font-second-size);
+    font-weight: var(--font-small-weight);
+    margin-bottom: 2vh;
+    text-align: center;
+}
+
+.akramfit-deletion-modal__footer {
+    background-color: #272727;
+    border-top: var(--white-border);
+    display: flex;
+    gap: 2vw;
+    padding: 1rem;
+}
+
+.akramfit-deletion-modal__button {
+    flex: 1;
+}
+
+/* Modifiers */
+.akramfit-deletion-modal__button--delete {
+    background-color: var(--red-color);
+}

@@ -1,0 +1,36 @@
+/* Block */
+.akramfit-add-images {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: min(5vw, 5vh);
+    height: min(5vw, 5vh);
+    border: var(--primary-border);
+    border-radius: var(--border-radius);
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 300ms ease;
+}
+
+/* States */
+.akramfit-add-images[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.akramfit-add-images:hover,
+.akramfit-add-images:focus {
+    border: var(--red-border);
+    border-radius: var(--border-radius);
+    outline: none;
+}
+
+/* Elements */
+.akramfit-add-images__icon path {
+    fill: var(--primary-color);
+    transition: fill 300ms ease;
+}
+
+.akramfit-add-images__icon:hover path {
+    fill: var(--red-color);
+}

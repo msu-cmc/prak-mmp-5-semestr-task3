@@ -1,0 +1,103 @@
+/* Block */
+.akramfit-select {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Elements */
+.akramfit-select__label {
+    color: var(--red-color);
+    font-size: var(--font-third-size);
+    font-weight: var(--font-small-weight);
+    border-radius: var(--border-radius);
+    margin-bottom: 4px;
+}
+
+.akramfit-select__error {
+    color: var(--red-color);
+    font-size: var(--font-third-size);
+    font-weight: var(--font-small-weight);
+    margin-top: 2px;
+}
+
+.akramfit-select__control {
+    color: var(--white-color-dark) !important;
+    border: var(--white-border) !important;
+    border-radius: var(--border-radius) !important;
+    background-color: var(--background-color) !important;
+    box-shadow: none;
+}
+
+.akramfit-select__control:hover {
+    border: var(--red-border) !important;
+
+    .akramfit-select__indicator-separator{
+        background-color: var(--red-color) !important;
+    }
+}
+
+.akramfit-select__control--is-focused {
+    box-shadow: none !important;
+    border: var(--red-border) !important;
+    .akramfit-select__indicator-separator{
+        background-color: var(--red-color) !important;
+    }
+}
+
+.akramfit-select__option:not(.akramfit-select__option--is-selected):not(.akramfit-select__option--is-focused) {
+    color: var(--white-color) !important;
+}
+
+.akramfit-select__control--is-focused .akramfit-select__value-container,
+.akramfit-select__control--menu-is-open {
+    outline: none !important;
+}
+
+.akramfit-select__placeholder {
+    color: var(--white-color-dark) !important;
+    font-weight: var(--font-small-weight);
+}
+
+.akramfit-select__indicator-separator {
+    background-color: var(--white-color) !important;
+    align-self: stretch;
+}
+.akramfit-select__indicator-separator:hover{
+    background-color: var(--red-color) !important;
+}
+
+.akramfit-select__option {
+    background-color: #505050 !important;
+    color: var(--white-color) !important;
+    font-size: var(--font-third-size) !important;
+} 
+
+.akramfit-select__option:hover {
+    background-color: #505050 !important;
+    color: var(--red-color) !important;
+    font-size: var(--font-third-size) !important;
+    
+}
+
+.akramfit-select__single-value {
+    color: var(--white-color) !important;
+}
+
+.akramfit-select__multi-value-label {
+    color: var(--white-color) !important;
+}
+
+.akramfit-select__option--is-selected {
+    color: var(--red-color) !important;
+    font-weight: 450 !important;
+}
+
+.akramfit-select__menu {
+    background-color: #505050 !important;
+    color: var(--white-color) !important;
+    border: none !important;
+    margin-top: 13px !important;
+    border-radius: var(--border-radius) !important;
+    overflow: hidden !important;
+}

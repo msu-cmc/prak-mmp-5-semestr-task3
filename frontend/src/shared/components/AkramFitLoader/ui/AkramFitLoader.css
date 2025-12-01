@@ -1,0 +1,11 @@
+/* Block */
+.akramfit-loader {
+    height: 50px;
+    width: 50px;
+    animation: akramfit-loader-spin 2s linear infinite;
+}
+
+@keyframes akramfit-loader-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
