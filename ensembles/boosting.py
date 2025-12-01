@@ -62,8 +62,71 @@ class GradientBoostingMSE:
         Returns:
             ConvergenceHistory | None: Instance of `ConvergenceHistory` if `trace=True` or if validation data is provided.
         """
-        
-        ...
+        from ensembles.utils import rmsle, whether_to_stop
+
+        # Определяем, нужно ли отслеживать историю
+        if trace is None:
+            trace = X_val is not None and y_val is not None
+
+        convergence_history: ConvergenceHistory | None = None
+        if trace:
+            convergence_history = {
+                "train": [],
+                "val": [] if X_val is not None and y_val is not None else None,
+            }
+
+        # Инициализация: начальное предсказание - среднее значение целевой переменной
+        self.const_prediction = float(np.mean(y))
+        current_prediction = np.full(X.shape[0], self.const_prediction)
+
+        # Обучаем деревья последовательно
+        for i, tree in enumerate(self.forest):
+            # Вычисляем антиградиент (для MSE это просто остатки: y - y_pred)
+            residuals = y - current_prediction
+
+            # Обучаем дерево на антиградиенте
+            tree.fit(X, residuals)
+
+            # Обновляем предсказания
+            tree_predictions = tree.predict(X)
+            current_prediction += self.learning_rate * tree_predictions
+
+            # Если нужна история сходимости
+            if trace and convergence_history is not None:
+                # Предсказание текущего ансамбля
+                y_pred_train = self._predict_trees(X, i + 1)
+                train_loss = rmsle(y, y_pred_train)
+                convergence_history["train"].append(train_loss)
+
+                if X_val is not None and y_val is not None:
+                    y_pred_val = self._predict_trees(X_val, i + 1)
+                    val_loss = rmsle(y_val, y_pred_val)
+                    convergence_history["val"].append(val_loss)  # type: ignore
+
+                # Проверка early stopping
+                if patience is not None and whether_to_stop(convergence_history, patience):
+                    # Обрезаем ансамбль до текущего размера
+                    self.forest = self.forest[:i + 1]
+                    self.n_estimators = i + 1
+                    break
+
+        return convergence_history
+
+    def _predict_trees(self, X: npt.NDArray[np.float64], n_trees: int) -> npt.NDArray[np.float64]:
+        """
+        Вспомогательная функция для предсказания с использованием первых n_trees деревьев.
+
+        Args:
+            X: Матрица признаков
+            n_trees: Количество деревьев для использования
+
+        Returns:
+            Предсказания
+        """
+        prediction = np.full(X.shape[0], self.const_prediction)
+        for tree in self.forest[:n_trees]:
+            prediction += self.learning_rate * tree.predict(X)
+        return prediction
 
     def predict(self, X: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
         """
@@ -77,8 +140,14 @@ class GradientBoostingMSE:
         Returns:
             npt.NDArray[np.float64]: Predicted values, array of shape (n_objects,).
         """
-        
-        ...
+        # Начинаем с константного предсказания
+        prediction = np.full(X.shape[0], self.const_prediction)
+
+        # Последовательно добавляем предсказания каждого дерева с учетом learning_rate
+        for tree in self.forest:
+            prediction += self.learning_rate * tree.predict(X)
+
+        return prediction
 
     def dump(self, dirpath: str) -> None:
         """

@@ -71,5 +71,18 @@ def whether_to_stop(convergence_history: ConvergenceHistory, patience: int) -> b
     KeyError
         If neither 'train' nor 'val' key is present in the convergence_history.
     """
-    
-    ...
+    # Выбираем историю для анализа: валидационную, если есть, иначе тренировочную
+    if convergence_history["val"] is not None:
+        history = convergence_history["val"]
+    else:
+        history = convergence_history["train"]
+
+    # Если история слишком короткая, продолжаем обучение
+    if len(history) <= patience:
+        return False
+
+    # Находим минимальное значение loss среди последних patience+1 шагов
+    best_loss = min(history[-(patience + 1):])
+
+    # Если лучший loss не на последнем шаге, значит не было улучшения за patience шагов
+    return best_loss < history[-1]

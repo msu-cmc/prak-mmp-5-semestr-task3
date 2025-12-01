@@ -53,8 +53,65 @@ class RandomForestMSE:
         Returns:
             ConvergenceHistory | None: Instance of `ConvergenceHistory` if `trace=True` or if validation data is provided.
         """
-        
-        ...
+        from ensembles.utils import rmsle, whether_to_stop
+
+        # Определяем, нужно ли отслеживать историю
+        if trace is None:
+            trace = X_val is not None and y_val is not None
+
+        convergence_history: ConvergenceHistory | None = None
+        if trace:
+            convergence_history = {
+                "train": [],
+                "val": [] if X_val is not None and y_val is not None else None,
+            }
+
+        n_objects = X.shape[0]
+
+        # Обучаем каждое дерево на bootstrap-выборке
+        for i, tree in enumerate(self.forest):
+            # Bootstrap sampling: случайная выборка с возвращением
+            bootstrap_indices = np.random.choice(n_objects, size=n_objects, replace=True)
+            X_bootstrap = X[bootstrap_indices]
+            y_bootstrap = y[bootstrap_indices]
+
+            # Обучаем дерево
+            tree.fit(X_bootstrap, y_bootstrap)
+
+            # Если нужна история сходимости
+            if trace and convergence_history is not None:
+                # Предсказание текущего ансамбля (от 0 до i включительно)
+                y_pred_train = self._predict_trees(X, i + 1)
+                train_loss = rmsle(y, y_pred_train)
+                convergence_history["train"].append(train_loss)
+
+                if X_val is not None and y_val is not None:
+                    y_pred_val = self._predict_trees(X_val, i + 1)
+                    val_loss = rmsle(y_val, y_pred_val)
+                    convergence_history["val"].append(val_loss)  # type: ignore
+
+                # Проверка early stopping
+                if patience is not None and whether_to_stop(convergence_history, patience):
+                    # Обрезаем лес до текущего размера
+                    self.forest = self.forest[:i + 1]
+                    self.n_estimators = i + 1
+                    break
+
+        return convergence_history
+
+    def _predict_trees(self, X: npt.NDArray[np.float64], n_trees: int) -> npt.NDArray[np.float64]:
+        """
+        Вспомогательная функция для предсказания с использованием первых n_trees деревьев.
+
+        Args:
+            X: Матрица признаков
+            n_trees: Количество деревьев для использования
+
+        Returns:
+            Предсказания
+        """
+        predictions = np.array([tree.predict(X) for tree in self.forest[:n_trees]])
+        return np.mean(predictions, axis=0)
 
     def predict(self, X: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
         """
@@ -68,8 +125,9 @@ class RandomForestMSE:
         Returns:
             npt.NDArray[np.float64]: Predicted values, array of shape (n_objects,).
         """
-        
-        ...
+        # Получаем предсказания от всех деревьев и усредняем их
+        predictions = np.array([tree.predict(X) for tree in self.forest])
+        return np.mean(predictions, axis=0)
 
     def dump(self, dirpath: str) -> None:
         """
