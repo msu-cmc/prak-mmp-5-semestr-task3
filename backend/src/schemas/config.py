@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     MINIO_PUBLIC_ENDPOINT: str
     MINIO_REGION_NAME: str = "us-east-1"
     OPENAI_API_KEY: str
+    
     @staticmethod
     def get_env_file() -> str:
         if env_file := os.getenv('ENV_FILE'):

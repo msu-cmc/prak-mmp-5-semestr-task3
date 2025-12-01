@@ -16,7 +16,9 @@ from src.users.dao import UsersDAO
 
 async def get_token(request: Request) -> str:
     authorization = request.headers.get("Authorization")
-    scheme, param = get_authorization_scheme_param(authorization)
+    scheme, param = get_authorization_scheme_param(
+        authorization_header_value=authorization
+    )
     if not authorization or scheme.lower() != "bearer":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -27,7 +29,7 @@ async def get_token(request: Request) -> str:
 
 class UserAuth:
     _instance = None
-    oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
+    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
     secret_key = settings.SECRET_KEY
     algorithm = settings.ALGORITHM
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -42,56 +44,89 @@ class UserAuth:
             token: str = Depends(oauth2_scheme),
             user_id: int = None
     ) -> User:
-        current_user_id = await self.get_current_user_id_from_token(token)
-        user = await UsersDAO.get(id=int(current_user_id))
-        if user.role == cfg.UserRoles.ADMIN or (
-                user_id and str(user_id) == current_user_id):
+        current_user_id = await self.get_current_user_id_from_token(
+            token=token
+        )
+        
+        user = await UsersDAO.get(
+            id=int(current_user_id)
+        )
+        
+        if user.role == cfg.UserRoles.ADMIN or (user_id and str(user_id) == current_user_id):
             return user
+
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='У пользователя нет доступов'
+            detail="У пользователя нет доступов"
         )
 
-    async def get_current_user_id_from_token(self, token: str) -> int:
+    async def get_current_user_id_from_token(
+            self,
+            token: str
+    ) -> int:
         try:
             payload = jwt.decode(
-                token, self.secret_key, algorithms=[self.algorithm]
+                token=token,
+                key=self.secret_key,
+                algorithms=[self.algorithm]
             )
         except JWTError:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail='Токен не валидный!')
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Токен не валидный"
+            )
 
-        expire = payload.get('exp')
-        expire_time = datetime.fromtimestamp(int(expire), tz=timezone.utc)
+        expire = payload.get("exp")
+
+        expire_time = datetime.fromtimestamp(
+            int(expire),
+            tz=timezone.utc
+        )
         if (not expire) or (expire_time < datetime.now(timezone.utc)):
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail='Токен истек')
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Токен истек"
+            )
 
-        user_id = payload.get('sub')
+        user_id = payload.get("sub")
         if not user_id:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail='Не найден ID пользователя')
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Не найден ID пользователя"
+            )
 
         return user_id
 
-    def get_password_hash(self, password: str) -> str:
+    def get_password_hash(
+            self,
+            password: str
+    ) -> str:
         return self.pwd_context.hash(password)
 
     def verify_password(
-            self, plain_password: str, hashed_password: str
+            self,
+            plain_password: str,
+            hashed_password: str
     ) -> None:
         if not self.pwd_context.verify(plain_password, hashed_password):
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail='Неверная почта или пароль'
+                detail="Неверная почта или пароль"
             )
 
-    def create_access_token(self, data: dict) -> str:
+    def create_access_token(
+            self,
+            data: dict
+    ) -> str:
         to_encode = data.copy()
+
         expire = datetime.now(timezone.utc) + timedelta(days=30)
         to_encode.update({"exp": expire})
+
         encode_jwt = jwt.encode(
-            to_encode, self.secret_key, algorithm=self.algorithm
+            claims=to_encode,
+            key=self.secret_key,
+            algorithm=self.algorithm
         )
         return encode_jwt
 
@@ -106,7 +141,8 @@ class UserDependency(UserAuth):
         return object.__new__(cls)
 
     def __init__(
-            self, requires_roles: Optional[List[cfg.UserRoles]] = None
+            self,
+            requires_roles: Optional[List[cfg.UserRoles]] = None
     ) -> None:
         if requires_roles:
             self.requires_roles = requires_roles
@@ -116,13 +152,17 @@ class UserDependency(UserAuth):
             request: Request,
             token: str = Depends(UserAuth.oauth2_scheme)
     ) -> User:
-        current_user_id = await self.get_current_user_id_from_token(token)
-        user = await UsersDAO.get(id=int(current_user_id))
+        current_user_id = await self.get_current_user_id_from_token(
+            token=token
+        )
+        user = await UsersDAO.get(
+            id=int(current_user_id)
+        )
 
         if user.role not in self.requires_roles:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='У пользователя нет доступов'
+                detail="У пользователя нет доступов"
             )
         request.state.user = user
         return user
