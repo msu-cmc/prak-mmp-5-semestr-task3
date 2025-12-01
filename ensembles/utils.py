@@ -20,12 +20,18 @@ class ConvergenceHistory(TypedDict):
     val: list[float] | None = None
 
 
-def rmsle(y: npt.NDArray[np.float64], z: npt.NDArray[np.float64]) -> np.float64:
+def rmsle(
+        y: npt.NDArray[np.float64],
+        z: npt.NDArray[np.float64]
+) -> np.float64:
     """
-    Calculate the Root Mean Squared Logarithmic Error (RMSLE) between two arrays.
+    Calculate the Root Mean Squared Logarithmic
+    Error (RMSLE) between two arrays.
 
-    RMSLE is a metric that is often used in regression problems where the target variable
-    is continuous and non-negative. It is particularly useful when the target variable
+    RMSLE is a metric that is often used in
+    regression problems where the target variable
+    is continuous and non-negative. It is particularly
+    useful when the target variable
     spans several orders of magnitude.
 
     Args
@@ -40,17 +46,21 @@ def rmsle(y: npt.NDArray[np.float64], z: npt.NDArray[np.float64]) -> np.float64:
     float
         The RMSLE value.
     """
-    res = np.sqrt(np.mean((np.log1p(y) - np.log1p(z)) ** 2))
+    res = np.sqrt(np.mean(
+        a=(np.log1p(y) - np.log1p(z)) ** 2
+    ))
     return float(res)
 
 
-def whether_to_stop(convergence_history: ConvergenceHistory, patience: int) -> bool:
+def whether_to_stop(
+        convergence_history: ConvergenceHistory,
+        patience: int
+) -> bool:
     """
-    Determine whether to stop training based on the convergence history.
+    Determine whether to stop training basedon the convergence history.
 
-    This function checks if the training or validation loss has not improved for a
-    specified number of epochs (patience). If the validation loss history is provided,
-    it is used for the decision; otherwise, the training loss history is used.
+    This function checks if the training or validation loss has not improved for a specified number of epochs (patience).
+    If the validation loss history is provided, it is used for the decision; otherwise, the training loss history is used.
 
     Args
     ----

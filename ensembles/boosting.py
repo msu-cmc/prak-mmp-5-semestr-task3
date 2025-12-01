@@ -27,9 +27,13 @@ class GradientBoostingMSE:
         It employs scikit-learn's `DecisionTreeRegressor` under the hood.
 
         Args:
-            n_estimators (int): Number of trees to boost each other.
-            tree_params (dict[str, Any] | None, optional): Parameters for the decision trees. Defaults to None.
-            learning_rate (float, optional): Scaling factor for the "gradient" step (the weight applied to each tree prediction). Defaults to 0.1.
+            n_estimators (int):
+                Number of trees to boost each other.
+            tree_params (dict[str, Any] | None, optional):
+                Parameters for the decision trees. Defaults to None.
+            learning_rate (float, optional):
+                Scaling factor for the "gradient" step 
+                (the weight applied to each tree prediction). Defaults to 0.1.
         """
         self.n_estimators = n_estimators
         self.learning_rate = learning_rate
@@ -52,15 +56,28 @@ class GradientBoostingMSE:
         Trains an ensemble of trees on the provided data.
 
         Args:
-            X (npt.NDArray[np.float64]): Objects features matrix, array of shape (n_objects, n_features).
-            y (npt.NDArray[np.float64]): Regression labels, array of shape (n_objects,).
-            X_val (npt.NDArray[np.float64] | None, optional): Validation set of objects, array of shape (n_val_objects, n_features). Defaults to None.
-            y_val (npt.NDArray[np.float64] | None, optional): Validation set of labels, array of shape (n_val_objects,). Defaults to None.
-            trace (bool | None, optional): Whether to calculate RMSLE while training. True by default if validation data is provided. Defaults to None.
-            patience (int | None, optional): Number of training steps without decreasing the train loss (or validation if provided), after which to stop training. Defaults to None.
+            X (npt.NDArray[np.float64]):
+                Objects features matrix, array of shape (n_objects, n_features).
+            y (npt.NDArray[np.float64]):
+                Regression labels, array of shape (n_objects,).
+            X_val (npt.NDArray[np.float64] | None, optional):
+                Validation set of objects, array of shape
+                (n_val_objects, n_features). Defaults to None.
+            y_val (npt.NDArray[np.float64] | None, optional):
+                Validation set of labels, array of shape (n_val_objects,).
+                Defaults to None.
+            trace (bool | None, optional):
+                Whether to calculate RMSLE while training.
+                True by default if validation data is provided.
+                Defaults to None.
+            patience (int | None, optional):
+                Number of training steps without decreasing
+                the train loss (or validation if provided),
+                after which to stop training. Defaults to None.
 
         Returns:
-            ConvergenceHistory | None: Instance of `ConvergenceHistory` if `trace=True` or if validation data is provided.
+            ConvergenceHistory | None: Instance of `ConvergenceHistory`
+            if `trace=True` or if validation data is provided.
         """
         from ensembles.utils import rmsle, whether_to_stop
 
@@ -112,9 +129,14 @@ class GradientBoostingMSE:
 
         return convergence_history
 
-    def _predict_trees(self, X: npt.NDArray[np.float64], n_trees: int) -> npt.NDArray[np.float64]:
+    def _predict_trees(
+            self,
+            X: npt.NDArray[np.float64],
+            n_trees: int
+    ) -> npt.NDArray[np.float64]:
         """
-        Вспомогательная функция для предсказания с использованием первых n_trees деревьев.
+        Вспомогательная функция для предсказания с
+        использованием первых n_trees деревьев.
 
         Args:
             X: Матрица признаков
@@ -128,20 +150,28 @@ class GradientBoostingMSE:
             prediction += self.learning_rate * tree.predict(X)
         return prediction
 
-    def predict(self, X: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
+    def predict(
+            self,
+            X: npt.NDArray[np.float64]
+    ) -> npt.NDArray[np.float64]:
         """
         Makes predictions with the ensemble of trees.
 
         All the trees make sequential predictions.
 
         Args:
-            X (npt.NDArray[np.float64]): Objects' features matrix, array of shape (n_objects, n_features).
+            X (npt.NDArray[np.float64]): Objects'
+            features matrix, array of shape (n_objects, n_features).
 
         Returns:
-            npt.NDArray[np.float64]: Predicted values, array of shape (n_objects,).
+            npt.NDArray[np.float64]: Predicted values,
+            array of shape (n_objects,).
         """
         # Начинаем с константного предсказания
-        prediction = np.full(X.shape[0], self.const_prediction)
+        prediction = np.full(
+            shape=X.shape[0],
+            fill_value=self.const_prediction
+        )
 
         # Последовательно добавляем предсказания каждого дерева с учетом learning_rate
         for tree in self.forest:
@@ -149,12 +179,16 @@ class GradientBoostingMSE:
 
         return prediction
 
-    def dump(self, dirpath: str) -> None:
+    def dump(
+            self,
+            dirpath: str
+    ) -> None:
         """
         Saves the model to the specified directory.
 
         Args:
-            dirpath (str): Path to the directory where the model will be saved.
+            dirpath (str): Path to the directory
+            where the model will be saved.
         """
         path = Path(dirpath)
         path.mkdir(parents=True)
@@ -170,27 +204,38 @@ class GradientBoostingMSE:
         trees_path = path / "trees"
         trees_path.mkdir()
         for i, tree in enumerate(self.forest):
-            joblib.dump(tree, trees_path / f"tree_{i:04d}.joblib")
+            joblib.dump(
+                value=tree,
+                filename=trees_path / f"tree_{i:04d}.joblib"
+            )
 
     @classmethod
-    def load(cls, dirpath: str) -> "GradientBoostingMSE":
+    def load(
+        cls,
+        dirpath: str
+    ) -> "GradientBoostingMSE":
         """
         Loads the model from the specified directory.
 
         Args:
-            dirpath (str): Path to the directory where the model is saved.
+            dirpath (str): Path to the directory
+            where the model is saved.
 
         Returns:
-            GradientBoostingMSE: An instance of the GradientBoostingMSE model.
+            GradientBoostingMSE: An instance of
+            the GradientBoostingMSE model.
         """
         with (Path(dirpath) / "params.json").open() as file:
             params = json.load(file)
-        instance = cls(params["n_estimators"], learning_rate=params["learning_rate"])
+        instance = cls(
+            n_esimators=params["n_estimators"],
+            learning_rate=params["learning_rate"]
+        )
 
         trees_path = Path(dirpath) / "trees"
 
         instance.forest = [
-            joblib.load(trees_path / f"tree_{i:04d}.joblib")
+            joblib.load(filename=trees_path / f"tree_{i:04d}.joblib")
             for i in range(params["n_estimators"])
         ]
         instance.const_prediction = params["const_prediction"]
