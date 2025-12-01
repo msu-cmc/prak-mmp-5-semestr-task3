@@ -1,11 +1,10 @@
 include tests/.env
 export
 
-IMAGE_NAME = agr_test
-CONTAINER_NAME =  agr_test_container
-BROWSER		  ?= python -m http.server -d
+IMAGE_NAME = ansambles_server_test
+CONTAINER_NAME = ansambles_server_test_container
+BROWSER	?= python -m http.server -d
 
-# Database commands
 .PHONY: db-build
 db-build:
 	docker build \
@@ -32,12 +31,12 @@ db-delete:
 	docker rm -f $(CONTAINER_NAME) || true
 
 
-MINIO_IMAGE        ?= minio/minio:latest
-MINIO_CONTAINER    ?= minio-local
-MINIO_DATA_DIR     ?= $(HOME)/minio/data
-MINIO_LOGS_DIR     ?= $(HOME)/minio/logs
+MINIO_IMAGE ?= minio/minio:latest
+MINIO_CONTAINER ?= minio-local
+MINIO_DATA_DIR ?= $(HOME)/minio/data
+MINIO_LOGS_DIR ?= $(HOME)/minio/logs
 
-MINIO_PORT         ?= 9000
+MINIO_PORT ?= 9000
 MINIO_CONSOLE_PORT ?= 9001
 
 MINIO_BUCKETS ?= projects

@@ -5,9 +5,9 @@ from gunicorn.app.wsgiapp import run
 from src.users.router import auth_router, user_router
 
 app = FastAPI(
-    title="AkramFit Backend",
+    title="AnsamblesServer",
     version="1.0.0",
-    description="Backend API for AkramFit project",
+    description="Backend API for AnsamblesServer project",
 )
 
 app = FastAPI()
