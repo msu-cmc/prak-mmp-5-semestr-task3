@@ -8,5 +8,7 @@ def prepare_user_data(
     """Подготовка данных пользователя"""
     user_dict = user_data.dict(exclude_unset=True)
     if user_data.password:
-        user_dict['password'] = auth.get_password_hash(user_data.password)
+        user_dict["password"] = auth.get_password_hash(
+            password=user_data.password
+        )
     return user_dict

@@ -27,7 +27,10 @@ class UsersDAO(BaseDAO[User]):
         user_dict: dict,
         session: AsyncSession = None
     ) -> User:
-        return await cls.create(session=session, **user_dict)
+        return await cls.create(
+            session=session,
+            **user_dict
+        )
 
     @classmethod
     @SessionManager.with_session(auto_commit=True)
@@ -38,8 +41,11 @@ class UsersDAO(BaseDAO[User]):
         user_data: UserUpdate,
         user_dict: dict
     ) -> None:
-        # максимально базовое обновление без сторонних сущностей
-        await UsersDAO.update(session=session, id=user_id, **user_dict)
+        await UsersDAO.update(
+            session=session,
+            id=user_id,
+            **user_dict
+        )
 
     @classmethod
     @SessionManager.with_session(auto_commit=False)
@@ -53,10 +59,8 @@ class UsersDAO(BaseDAO[User]):
         alphabet_sort: bool = True,
         **filters: Any
     ) -> PagePaginate:
-        # простая пагинация по пользователям без join'ов
         query = select(cls.model)
 
-        # сортировка по ФИО
         if alphabet_sort:
             query = query.order_by(func.lower(cls.model.fio))
         else:
@@ -81,10 +85,13 @@ class UsersDAO(BaseDAO[User]):
         session: AsyncSession,
         email: str
     ) -> User:
-        users = (await UsersDAO.paginate(session=session, email=email)).values
+        users = (await UsersDAO.paginate(
+            session=session,
+            email=email
+        )).values
         if not users:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail='Пользователь не существует'
+                detail="Пользователь не существует"
             )
         return users[0]
