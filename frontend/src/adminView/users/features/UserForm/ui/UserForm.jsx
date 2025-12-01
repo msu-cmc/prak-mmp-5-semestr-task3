@@ -1,7 +1,7 @@
 import "./UserForm.css"
 
-import { AkramFitSelect } from "shared/components/AkramFitSelect";
-import { AkramFitInput } from "shared/components/AkramFitInput/Index";
+import { AnsamblesServerSelect } from "shared/components/AnsamblesServerSelect";
+import { AnsamblesServerInput } from "shared/components/AnsamblesServerInput/Index";
 import { ROLES_OPTIONS } from "shared/consts/roles";
 
 const UserForm = ({
@@ -22,7 +22,7 @@ const UserForm = ({
     return (
         <div className="user-form__container">
             <div className="form-user-input-container">
-                <AkramFitInput
+                <AnsamblesServerInput
                     className="input"
                     disabled={disabled}
                     placeholder={"Введите ФИО"}
@@ -33,7 +33,7 @@ const UserForm = ({
                 />
             </div>
             <div className="form-user-input-container">
-                <AkramFitInput
+                <AnsamblesServerInput
                     disabled={disabled}
                     placeholder={"Введите почту"}
                     label="Почта"
@@ -43,7 +43,7 @@ const UserForm = ({
                 />
             </div>
             <div className="form-user-input-container">
-                <AkramFitSelect 
+                <AnsamblesServerSelect 
                     options={ROLES_OPTIONS}
                     onChange={(role) => setField("role", role)}
                     label="Роль"
@@ -55,7 +55,7 @@ const UserForm = ({
             </div>
             {type === "edit" &&
                 <div className="form-user-input-container">
-                    <AkramFitInput
+                    <AnsamblesServerInput
                         disabled={disabled}
                         placeholder={"Введите новый пароль"}
                         label="Пароль"
@@ -65,7 +65,7 @@ const UserForm = ({
             }
             {type !== "edit" &&
                 <div className="form-user-input-container">
-                    <AkramFitInput
+                    <AnsamblesServerInput
                         disabled={disabled}
                         placeholder={"Введите пароль"}
                         label="Пароль"

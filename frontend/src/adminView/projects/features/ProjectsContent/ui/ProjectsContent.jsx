@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import { AkramFitButton } from "shared/components/AkramFitButton";
-import { AkramFitInput } from "shared/components/AkramFitInput/Index";
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton";
+import { AnsamblesServerInput } from "shared/components/AnsamblesServerInput/Index";
 import { ProjectCard } from "adminView/projects/entities/ProjectCard";
 import { ProjectModal } from "adminView/projects/features/ProjectModal";
 
@@ -81,12 +81,12 @@ const ProjectsContent = () => {
             </p>
 
             <div className="content__main projects-content__controls">
-                <AkramFitInput
+                <AnsamblesServerInput
                     className="projects-content__controls__control--input"
                     placeholder="Поиск по названию"
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                <AkramFitButton
+                <AnsamblesServerButton
                     className="projects-content__controls__control--button"
                     text="Добавить"
                     onClick={() => setShow(true)}

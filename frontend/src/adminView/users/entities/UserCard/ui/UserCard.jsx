@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ReactComponent as EditIcon } from "shared/assets/items/Edit.svg";
 import { ReactComponent as CrossIcon } from "shared/assets/items/x-square.svg";
 
-import { AkramFitDeletionModal } from "shared/components/AkramFitDeletionModal";
-import { AkramFitCard } from "shared/components/AkramFitCard";
+import { AnsamblesServerDeletionModal } from "shared/components/AnsamblesServerDeletionModal";
+import { AnsamblesServerCard } from "shared/components/AnsamblesServerCard";
 import { ROLES } from "shared/consts/roles";
 import { deleteUser } from "states/Users/model/services/deleteUser";
 import { returnUsersLoading } from "states/Users";
@@ -29,7 +29,7 @@ const UserCard = ({ user }) => {
     };
 
     return (
-        <AkramFitCard className="user-card">
+        <AnsamblesServerCard className="user-card">
             <div className="user-card__body">
                 <div className="user-card__row user-card__row--title">
                     <div className="user-card__title">
@@ -67,14 +67,14 @@ const UserCard = ({ user }) => {
                 />
             </div>
 
-            <AkramFitDeletionModal
+            <AnsamblesServerDeletionModal
                 loading={loading}
                 show={isModalOpen}
                 setShow={setIsModalOpen}
                 header="Удаление пользователя"
                 submit={handleDelete}
             />
-        </AkramFitCard>
+        </AnsamblesServerCard>
     );
 };
 

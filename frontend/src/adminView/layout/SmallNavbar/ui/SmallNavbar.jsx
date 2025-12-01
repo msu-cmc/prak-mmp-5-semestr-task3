@@ -11,13 +11,12 @@ import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 
 import {
-    AUTH_ROUTE,
     FIRST_PAGE_ROUTE,
     USERS_ROUTE,
     USER_ROUTE,
 } from "shared/consts/paths";
 
-import { AkramFitModal } from "shared/components/AkramFitModal";
+import { AnsamblesServerModal } from "shared/components/AnsamblesServerModal";
 import { CURRENT_PATH, USER } from "shared/consts/localstorage";
 
 import ELEMENTS from "adminView/layout/elements";
@@ -32,9 +31,7 @@ const SmallNavbar = () => {
     const [show, setShow] = useState(false);
 
     const exit = () => {
-        // Вызываем экшен logout для очистки всех данных
         dispatch(loggedUserActions.logout());
-        // Переходим на главную страницу (корень)
         navigate(FIRST_PAGE_ROUTE);
     };
 
@@ -102,7 +99,7 @@ const SmallNavbar = () => {
                 </div>
             </div>
 
-            <AkramFitModal
+            <AnsamblesServerModal
                 show={show}
                 warning="Вы точно хотите выйти?"
                 submit={exit}

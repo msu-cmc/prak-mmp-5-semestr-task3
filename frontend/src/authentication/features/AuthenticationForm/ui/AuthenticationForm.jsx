@@ -3,7 +3,7 @@ import "./AuthenticationForm.css";
 import { useState } from "react";
 import { Spinner } from "react-bootstrap";
 
-import { AkramFitButton } from "shared/components/AkramFitButton";
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton";
 
 import { AuthForm } from "authentication/entities/AuthForm";
 
@@ -63,7 +63,7 @@ const AuthenticationForm = ({ info, onSubmit, error, loading }) => {
                 handleSubmit={handleSubmit}
             />
 
-            <AkramFitButton
+            <AnsamblesServerButton
                 className="auth-btn"
                 onClick={handleSubmit}
                 text={info.action}

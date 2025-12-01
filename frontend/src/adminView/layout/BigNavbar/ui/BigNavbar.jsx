@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 
 import { FIRST_PAGE_ROUTE, USER_ROUTE } from "shared/consts/paths";
 
-import { AkramFitModal } from "shared/components/AkramFitModal";
+import { AnsamblesServerModal } from "shared/components/AnsamblesServerModal";
 import { CURRENT_PATH } from "shared/consts/localstorage";
 
 import { closeSidebar } from "states/UI";
@@ -26,9 +26,7 @@ const BigNavbar = ({ user }) => {
     const [show, setShow] = useState(false);
 
     const exit = () => {
-        // Вызываем экшен logout для очистки всех данных
         dispatch(loggedUserActions.logout());
-        // Переходим на главную страницу (корень)
         navigate(FIRST_PAGE_ROUTE);
     };
 
@@ -110,7 +108,7 @@ const BigNavbar = ({ user }) => {
                 </div>
             </div>
 
-            <AkramFitModal
+            <AnsamblesServerModal
                 show={show}
                 warning="Вы точно хотите выйти?"
                 submit={exit}

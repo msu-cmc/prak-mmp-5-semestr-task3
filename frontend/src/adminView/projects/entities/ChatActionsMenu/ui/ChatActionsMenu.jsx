@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./ChatActionsMenu.css";
 
 import { ReactComponent as X_item } from "shared/assets/items/x-lg.svg";
-import { AkramFitDeletionModal } from "shared/components/AkramFitDeletionModal";
+import { AnsamblesServerDeletionModal } from "shared/components/AnsamblesServerDeletionModal";
 
 const ChatActionsMenu = ({ chat, onRenameChat, onDeleteChat }) => {
     const [open, setOpen] = useState(false);
@@ -88,7 +88,7 @@ const ChatActionsMenu = ({ chat, onRenameChat, onDeleteChat }) => {
                 </div>
             )}
 
-            <AkramFitDeletionModal
+            <AnsamblesServerDeletionModal
                 loading={false}
                 show={isModalOpen}
                 setShow={setIsModalOpen}

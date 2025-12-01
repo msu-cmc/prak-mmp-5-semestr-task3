@@ -1,1 +1,0 @@
-export { AkramFitRatingScale } from "./ui/AkramFitRatingScale"

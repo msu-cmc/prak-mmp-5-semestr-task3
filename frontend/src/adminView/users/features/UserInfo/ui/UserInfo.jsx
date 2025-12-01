@@ -7,8 +7,8 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 
 import { USERS_ROUTE } from "shared/consts/paths"
-import { AkramFitDeletionModal } from "shared/components/AkramFitDeletionModal"
-import { AkramFitButton } from "shared/components/AkramFitButton"
+import { AnsamblesServerDeletionModal } from "shared/components/AnsamblesServerDeletionModal"
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton"
 import { ROLES_OPTIONS } from "shared/consts/roles"
 import { UserPlaceHolderSecond } from "adminView/users/entities/UserPlaceHolderSecond"
 
@@ -127,18 +127,18 @@ const UserInfo = ({label}) => {
                         />
                     }
                     <div className="user-info-btn-container">
-                        <AkramFitButton
+                        <AnsamblesServerButton
                             onClick={() => setEdit(!edit)}
                             text="Редактировать"
                         />                
-                        <AkramFitButton
+                        <AnsamblesServerButton
                             loading={loading}
                             style={{width: "43%"}}
                             onClick={() => setDeleteShow(!deleteShow)}
                             text="Удалить"
                         />
                     </div>
-                    <AkramFitDeletionModal
+                    <AnsamblesServerDeletionModal
                         show={deleteShow}
                         setShow={setDeleteShow}
                         submit={onDelete}
@@ -159,11 +159,11 @@ const UserInfo = ({label}) => {
                         />
                     }
                     <div className="user-info-btn-container">
-                        <AkramFitButton
+                        <AnsamblesServerButton
                             onClick={() => setEdit(!edit)}
                             text="Отменить"
                         />                
-                        <AkramFitButton
+                        <AnsamblesServerButton
                             loading={loading}
                             onClick={(e) => handleSubmit(e)}
                             style={{width: "43%"}}
@@ -172,7 +172,7 @@ const UserInfo = ({label}) => {
                     </div>
                 </div>
             }
-            <AkramFitDeletionModal
+            <AnsamblesServerDeletionModal
                 show={show}
                 setShow={setShow}
                 header="Удаление пользователя"

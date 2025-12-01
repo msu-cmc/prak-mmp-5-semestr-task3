@@ -4,5 +4,4 @@ export const CURRENT_PATH   = "curr_path"
 export const RECOVERY_EMAIL = "recovery_email"
 export const USER           = "user"
 
-// ID гостевого пользователя для неавторизованных пользователей
 export const GUEST_USER_ID  = 3

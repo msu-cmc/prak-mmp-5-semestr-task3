@@ -3,7 +3,7 @@ import "./UserModal.css"
 import { Modal } from "react-bootstrap"
 import { useEffect, useState } from "react"
 
-import { AkramFitButton } from "shared/components/AkramFitButton"
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton"
 
 import { UserForm } from "adminView/users/features/UserForm"
 
@@ -109,12 +109,12 @@ const UserModal = ({show, setShow, formData, loading=false, setFormData, submit}
                 />
             </Modal.Body>
             <Modal.Footer className="modal-2-btn-footer">
-                <AkramFitButton
+                <AnsamblesServerButton
                     style={{flex:"1"}}
                     onClick={() => setShow(!show)}
                     text="Отмена"
                 />                
-                <AkramFitButton
+                <AnsamblesServerButton
                     loading={loading}
                     style={{flex:"1"}}
                     onClick={(e) => handleSubmit(e)}

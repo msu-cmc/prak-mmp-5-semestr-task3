@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as EditIcon } from "shared/assets/items/Edit.svg";
 import { ReactComponent as CrossIcon } from "shared/assets/items/x-square.svg";
 
-import { AkramFitCard } from "shared/components/AkramFitCard";
-import { AkramFitDeletionModal } from "shared/components/AkramFitDeletionModal";
+import { AnsamblesServerCard } from "shared/components/AnsamblesServerCard";
+import { AnsamblesServerDeletionModal } from "shared/components/AnsamblesServerDeletionModal";
 
 const ProjectCard = ({ project, onDelete }) => {
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const ProjectCard = ({ project, onDelete }) => {
     const ifcName = project?.ifc_url || "";
 
     return (
-        <AkramFitCard className="project-card">
+        <AnsamblesServerCard className="project-card">
             <div className="project-card__body" onClick={() => navigate(`/projects/${project.id}`)}>
                 <div className="project-card__row project-card__row--title">
                     <div className="project-card__title">
@@ -50,14 +50,14 @@ const ProjectCard = ({ project, onDelete }) => {
                 />
             </div>
 
-            <AkramFitDeletionModal
+            <AnsamblesServerDeletionModal
                 loading={false}
                 show={isModalOpen}
                 setShow={setIsModalOpen}
                 header="Удаление проекта"
                 submit={handleDelete}
             />
-        </AkramFitCard>
+        </AnsamblesServerCard>
     );
 };
 

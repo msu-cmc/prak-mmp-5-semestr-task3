@@ -1,7 +1,7 @@
 import { useCallback } from "react";
-import { AkramFitInput } from "shared/components/AkramFitInput/Index";
+import { AnsamblesServerInput } from "shared/components/AnsamblesServerInput/Index";
 import "./ChatComposer.css";
-import { AkramFitButton } from "shared/components/AkramFitButton";
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton";
 
 const ChatComposer = ({ value, onChange, onSend, disabled }) => {
     const trimmed = typeof value === "string" ? value.trim() : "";
@@ -22,7 +22,7 @@ const ChatComposer = ({ value, onChange, onSend, disabled }) => {
 
     return (
         <div className="pd-composer">
-            <AkramFitInput
+            <AnsamblesServerInput
                 as="textarea"
                 rows={1}
                 minRows={1}
@@ -33,7 +33,7 @@ const ChatComposer = ({ value, onChange, onSend, disabled }) => {
                 placeholder="Напишите сообщение…"
                 onKeyDown={handleKeyDown}
             />
-            <AkramFitButton
+            <AnsamblesServerButton
                 className="pd-composer__sendbtn"
                 onClick={handleSend}
                 disabled={disabled || !trimmed}
@@ -43,7 +43,7 @@ const ChatComposer = ({ value, onChange, onSend, disabled }) => {
                     <path d="M22 2L11 13" />
                     <path d="M22 2l-7 20-4-9-9-4 20-7z" />
                 </svg>
-            </AkramFitButton>
+            </AnsamblesServerButton>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import "./UserPlaceHolderSecond.css"
 
-import { AkramFitPlaceholder } from "shared/components/AkramFitPlaceholder"
+import { AnsamblesServerPlaceholder } from "shared/components/AnsamblesServerPlaceholder"
 
 const UserPlaceHolderSecond = () => {
     return(
@@ -12,12 +12,12 @@ const UserPlaceHolderSecond = () => {
                     className="placeholder-item"
                     key={i}
                 >
-                    <AkramFitPlaceholder
+                    <AnsamblesServerPlaceholder
                         height="24px"
                         width="30%"
                         style={{marginBottom:"8px"}}
                     />
-                    <AkramFitPlaceholder
+                    <AnsamblesServerPlaceholder
                         height="40px"
                         width="100%"
                     />

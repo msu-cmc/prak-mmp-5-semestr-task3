@@ -3,8 +3,8 @@ import "./CheckCodeForm.css"
 import {Form} from "react-bootstrap";
 import {useState} from "react";
 
-import { AkramFitButton } from "shared/components/AkramFitButton";
-import { AkramFitInput } from "shared/components/AkramFitInput/Index";
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton";
+import { AnsamblesServerInput } from "shared/components/AnsamblesServerInput/Index";
 
 const CheckCodeForm = ({onSubmit, error}) => {
     const [formData, setFormData] = useState({code:""})
@@ -56,7 +56,7 @@ const CheckCodeForm = ({onSubmit, error}) => {
                 </div>
             }
             <Form.Group className="input-group">
-                <AkramFitInput
+                <AnsamblesServerInput
                     placeholder="Введите код"
                     type="number"
                     className="auth-input"
@@ -69,7 +69,7 @@ const CheckCodeForm = ({onSubmit, error}) => {
                     }}
                 />
             </Form.Group>
-            <AkramFitButton
+            <AnsamblesServerButton
                 className="auth-btn"
                 onClick={(e) => handleSubmit(e)}
                 text="Продолжить"

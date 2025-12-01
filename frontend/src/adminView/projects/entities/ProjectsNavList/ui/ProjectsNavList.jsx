@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 import { returnProjects, returnProjectsLoading, getProjects, createProject } from "states/Projects";
 import { PROJECTS_ROUTE, PROJECT_ROUTE } from "shared/consts/paths";
-import { AkramFitButton } from "shared/components/AkramFitButton";
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton";
 import { ProjectModal } from "adminView/projects/features/ProjectModal";
 
 export const ProjectsNavList = () => {
@@ -67,7 +67,7 @@ export const ProjectsNavList = () => {
             </div>
 
             <div className="projects-nav__list">
-                <AkramFitButton
+                <AnsamblesServerButton
                     className="projects-nav__item"
                     title="Добавить проект"
                     onClick={() => setShow(true)}
@@ -81,7 +81,7 @@ export const ProjectsNavList = () => {
                 {visible.map((p) => {
                     const isActive = currentProjectId && String(p.id) === String(currentProjectId);
                     return (
-                        <AkramFitButton
+                        <AnsamblesServerButton
                             key={p.id}
                             className={`projects-nav__item ${isActive ? "projects-nav__item--active" : ""}`}
                             title={p?.name || ""}
@@ -92,7 +92,7 @@ export const ProjectsNavList = () => {
                 })}
 
                 {hasMore && (
-                    <AkramFitButton
+                    <AnsamblesServerButton
                         className="projects-nav__more"
                         onClick={() => navigate(PROJECTS_ROUTE)}
                         text="⋯ Видеть больше"

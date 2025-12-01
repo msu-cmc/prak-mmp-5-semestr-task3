@@ -3,7 +3,7 @@ import "./TopNavbar.css";
 import { ReactComponent as Logo } from "shared/assets/items/favicon.svg";
 import { useNavigate } from "react-router-dom";
 import { AUTH_ROUTE } from "shared/consts/paths";
-import { AkramFitButton } from "shared/components/AkramFitButton";
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton";
 
 const TopNavbar = ({ onUploadClick }) => {
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const TopNavbar = ({ onUploadClick }) => {
             </div>
             {onUploadClick && (
                 <div className="top-navbar__center">
-                    <AkramFitButton
+                    <AnsamblesServerButton
                         className="top-navbar__btn top-navbar__btn--upload"
                         onClick={handleUpload}
                         text="Загрузите модель"
@@ -37,12 +37,12 @@ const TopNavbar = ({ onUploadClick }) => {
                 </div>
             )}
             <div className="top-navbar__right">
-                <AkramFitButton
+                <AnsamblesServerButton
                     className="top-navbar__btn top-navbar__btn--login"
                     onClick={handleLogin}
                     text="Войти"
                 />
-                <AkramFitButton
+                <AnsamblesServerButton
                     className="top-navbar__btn top-navbar__btn--register"
                     onClick={handleRegister}
                     text="Зарегистрироваться"

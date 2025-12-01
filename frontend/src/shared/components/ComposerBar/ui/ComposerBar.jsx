@@ -1,7 +1,7 @@
 import "./ComposerBar.css";
 import { useCallback } from "react";
-import { AkramFitInput } from "shared/components/AkramFitInput/Index";
-import { AkramFitButton } from "shared/components/AkramFitButton";
+import { AnsamblesServerInput } from "shared/components/AnsamblesServerInput/Index";
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton";
 
 const ComposerBar = ({
     value,
@@ -28,7 +28,7 @@ const ComposerBar = ({
 
     return (
         <div className="pd-composer">
-            <AkramFitInput
+            <AnsamblesServerInput
                 as="textarea"
                 rows={1}
                 minRows={1}
@@ -39,14 +39,14 @@ const ComposerBar = ({
                 placeholder={placeholder}
                 onKeyDown={handleKeyDown}
             />
-            <AkramFitButton
+            <AnsamblesServerButton
                 className="pd-composer__sendbtn"
                 onClick={handleSend}
                 disabled={disabled || !trimmed}
                 aria-label="Отправить"
             >
                 <span className="pd-sendicon" />
-            </AkramFitButton>
+            </AnsamblesServerButton>
         </div>
     );
 };

@@ -2,14 +2,14 @@ import "./HomeCard.css";
 
 import { useNavigate } from "react-router-dom";
 
-import { AkramFitCard } from "shared/components/AkramFitCard";
-import { AkramFitDivider } from "shared/components/AkramFitDivider";
+import { AnsamblesServerCard } from "shared/components/AnsamblesServerCard";
+import { AnsamblesServerDivider } from "shared/components/AnsamblesServerDivider";
 
 export const HomeCard = ({ card, loading = false }) => {
     const navigate = useNavigate();
 
     return (
-        <AkramFitCard
+        <AnsamblesServerCard
             className="home-card"
             onClick={() => navigate(card.route)}
         >
@@ -23,7 +23,7 @@ export const HomeCard = ({ card, loading = false }) => {
                     </div>
                 </header>
 
-                <AkramFitDivider className="home-card__divider" />
+                <AnsamblesServerDivider className="home-card__divider" />
 
                 <div className="home-card__body">
                     <p className="home-card__text">
@@ -31,7 +31,7 @@ export const HomeCard = ({ card, loading = false }) => {
                     </p>
                 </div>
             </div>
-        </AkramFitCard>
+        </AnsamblesServerCard>
     );
 };
 

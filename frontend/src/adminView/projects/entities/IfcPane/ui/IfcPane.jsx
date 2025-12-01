@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { IfcViewer } from "adminView/projects/components/IfcViewer";
-import { AkramFitSwitcher } from "shared/components/AkramFitSwitcher";
+import { AnsamblesServerSwitcher } from "shared/components/AnsamblesServerSwitcher";
 import "./IfcPane.css";
 
 const IfcPane = ({
@@ -142,7 +142,7 @@ const IfcPane = ({
                                         {size ? formatSize(size) : null}
                                     </div>
                                 </div>
-                                <AkramFitSwitcher
+                                <AnsamblesServerSwitcher
                                     checked={isDarkTheme}
                                     onChange={setIsDarkTheme}
                                     leftLabel="Светлая"

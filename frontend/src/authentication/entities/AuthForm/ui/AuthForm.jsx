@@ -2,7 +2,7 @@ import "./AuthForm.css";
 
 import { Form } from "react-bootstrap";
 
-import { AkramFitInput } from "shared/components/AkramFitInput/Index";
+import { AnsamblesServerInput } from "shared/components/AnsamblesServerInput/Index";
 
 const AuthForm = ({
     info,
@@ -14,7 +14,7 @@ const AuthForm = ({
     <Form.Group className="auth-form-group">
         {info.email && (
             <div className="auth-input-container">
-                <AkramFitInput
+                <AnsamblesServerInput
                     id="email-input"
                     className={`auth-input${errors.email? " red-border" : ""}`}
                     placeholder="Почта"
@@ -33,7 +33,7 @@ const AuthForm = ({
 
         {info.password && (
             <div className="auth-input-container">
-                <AkramFitInput
+                <AnsamblesServerInput
                     id="password-input"
                     type="password"
                     className={`auth-input${errors.password ? " red-border" : ""}`}

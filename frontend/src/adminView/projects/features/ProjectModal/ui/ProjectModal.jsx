@@ -1,7 +1,7 @@
 import "./ProjectModal.css";
 import { Modal } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
-import { AkramFitButton } from "shared/components/AkramFitButton";
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton";
 import { ProjectForm } from "adminView/projects/features/ProjectForm";
 
 const ProjectModal = ({
@@ -123,12 +123,12 @@ const ProjectModal = ({
                 />
             </Modal.Body>
             <Modal.Footer className="modal-2-btn-footer">
-                <AkramFitButton
+                <AnsamblesServerButton
                     onClick={() => setShow(false)}
                     text="Отмена"
                     disabled={loading || uploading}
                 />
-                <AkramFitButton
+                <AnsamblesServerButton
                     loading={loading || uploading}
                     disabled={loading || uploading}
                     onClick={handleSubmit}

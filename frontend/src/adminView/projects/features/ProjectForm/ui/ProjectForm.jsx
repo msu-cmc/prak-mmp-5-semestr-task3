@@ -1,8 +1,8 @@
 import "./ProjectForm.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AkramFitSelect } from "shared/components/AkramFitSelect";
-import { AkramFitInput } from "shared/components/AkramFitInput/Index";
+import { AnsamblesServerSelect } from "shared/components/AnsamblesServerSelect";
+import { AnsamblesServerInput } from "shared/components/AnsamblesServerInput/Index";
 import { FileDropzone } from "adminView/projects/components/FileDropzone";
 import { getProjects, returnProjects } from "states/Projects";
 
@@ -87,7 +87,7 @@ const ProjectForm = ({
     return (
         <div className="project-form__container">
             <div className="form-project-input-container">
-                <AkramFitInput
+                <AnsamblesServerInput
                     className="input"
                     disabled={disabled}
                     placeholder="Введите название проекта"
@@ -98,7 +98,7 @@ const ProjectForm = ({
                 />
             </div>
             <div className="form-project-input-container">
-                <AkramFitInput
+                <AnsamblesServerInput
                     className="input"
                     disabled={disabled}
                     placeholder="Введите название файла"
@@ -139,7 +139,7 @@ const ProjectForm = ({
                     />
                 </div>
                 <div className="form-project-input-container-right">
-                    <AkramFitSelect
+                    <AnsamblesServerSelect
                         className="input"
                         disabled={disabled}
                         label="Выберите из существующих проектов"

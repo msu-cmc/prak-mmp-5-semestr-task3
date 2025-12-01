@@ -5,7 +5,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { FIRST_PAGE_ROUTE, NEW_PROJECT_ROUTE } from "shared/consts/paths";
 import { routeConfig } from "shared/config/routeConfig";
 import { CURRENT_PATH, USER } from "shared/consts/localstorage";
-import { AkramFitLoader } from "shared/components/AkramFitLoader";
+import { AnsamblesServerLoader } from "shared/components/AnsamblesServerLoader";
 
 import { loggedUserActions, returnLoggedUser } from "states/LoggedUser";
 
@@ -50,7 +50,7 @@ const AppRouter = memo(() => {
                         alignItems:"center"
                     }}
                 >
-                    <AkramFitLoader/>
+                    <AnsamblesServerLoader/>
                 </div>
             }
         >
@@ -58,7 +58,6 @@ const AppRouter = memo(() => {
         </Suspense>
     )
 
-    console.log("ROUTES:", routes);
     return (
         <Routes>
             {routes.map(({ path, element }) => (

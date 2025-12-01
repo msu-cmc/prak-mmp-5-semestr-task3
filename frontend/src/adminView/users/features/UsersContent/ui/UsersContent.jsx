@@ -7,9 +7,9 @@ import { UserModal } from "adminView/users/entities/UserModal"
 import { UserCard } from "adminView/users/entities/UserCard"
 import { UserNothing } from "adminView/users/entities/UserNothing"
 
-import { AkramFitSelect } from "shared/components/AkramFitSelect"
-import { AkramFitInput } from "shared/components/AkramFitInput/Index"
-import { AkramFitButton } from "shared/components/AkramFitButton"
+import { AnsamblesServerSelect } from "shared/components/AnsamblesServerSelect"
+import { AnsamblesServerInput } from "shared/components/AnsamblesServerInput/Index"
+import { AnsamblesServerButton } from "shared/components/AnsamblesServerButton"
 import { ROLES_OPTIONS_WITH_EMPTY } from "shared/consts/roles"
 
 import { getUsers } from "states/Users/model/services/getUsers"
@@ -62,12 +62,12 @@ const UsersContent = () => {
                 Пользователи
             </p>
             <div className="content__main users-content__controls">
-                <AkramFitInput
+                <AnsamblesServerInput
                     className="users-content__controls__control--input"
                     placeholder="Поиск"
                     onChange={(e) => setQuery(e.target.value)}
                 />
-                <AkramFitSelect
+                <AnsamblesServerSelect
                     className="users-content__controls__control--select"
                     placeholder="Роль"
                     options={ROLES_OPTIONS_WITH_EMPTY}
@@ -79,7 +79,7 @@ const UsersContent = () => {
                         }))
                     }}
                 />
-                <AkramFitButton
+                <AnsamblesServerButton
                     className="users-content__controls__control--button"
                     text="Добавить"
                     onClick={() => setShow(!show)}
