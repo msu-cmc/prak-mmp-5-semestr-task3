@@ -31,6 +31,12 @@
 ├── data/                   # Датасеты
 │   └── kc_house_data.csv  # House Sales in King County
 │
+├── backend/                # Backend сервис (FastAPI)
+├── frontend/               # Frontend сервис (React)
+│
+├── docker-compose.yml      # Docker Compose конфигурация
+├── Makefile               # Команды для управления
+├── DOCKER.md              # Документация по Docker
 ├── IMPLEMENTATION.md       # Детальное описание реализации
 ├── REPORT.md              # Полный отчёт с результатами
 └── README.md              # Этот файл
@@ -38,7 +44,25 @@
 
 ## Быстрый старт
 
-### 1. Установка зависимостей
+### Вариант 1: Docker (рекомендуется)
+
+```bash
+# Сборка и запуск всех сервисов
+make up
+
+# Или без make
+docker-compose up -d
+```
+
+После запуска:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000/docs
+
+Подробнее: [DOCKER.md](DOCKER.md)
+
+### Вариант 2: Локальная установка
+
+#### 1. Установка зависимостей
 
 ```bash
 # Создайте виртуальное окружение
@@ -53,7 +77,7 @@ source .venv/bin/activate  # Unix/Mac
 pip install numpy pandas scikit-learn matplotlib seaborn jupyter joblib
 ```
 
-### 2. Использование моделей
+#### 2. Использование моделей
 
 ```python
 import numpy as np
@@ -90,7 +114,7 @@ rf_loaded = RandomForestMSE.load("models/rf_model")
 gb_loaded = GradientBoostingMSE.load("models/gb_model")
 ```
 
-### 3. Запуск экспериментов
+#### 3. Запуск экспериментов
 
 ```bash
 cd experiments

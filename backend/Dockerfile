@@ -13,7 +13,9 @@ COPY pyproject.toml poetry.lock* ./
 
 RUN poetry install --no-interaction --no-ansi --no-root
 
-COPY app.py ./app.py
-COPY src ./src
+COPY backend/app.py ./app.py
+COPY backend/src ./src
+COPY ensembles ./ensembles
+COPY data ./data
 
 CMD ["python", "app.py"]
