@@ -21,39 +21,66 @@ from src.users.utils import prepare_user_data
 user_router = APIRouter(prefix='/api/users', tags=['Users'])
 
 
-@user_router.post("/", response_model=UserResponse)
+@user_router.post(path="/", response_model=UserResponse)
 async def create_user(
     user_data: UserRegister,
     #_=Depends(UserDependency([cfg.UserRoles.ADMIN]))  # noqa
 ) -> User:
-    user_dict = prepare_user_data(user_data)
-    user = await UsersDAO.create_user(user_data, user_dict)
-    return await UsersDAO.get(id=user.id)
+    user_dict = prepare_user_data(
+        user_data=user_data
+    )
+    user = await UsersDAO.create_user(
+        user_data=user_data,
+        user_dict=user_dict
+    )
+    return await UsersDAO.get(
+        id=user.id
+    )
 
 
-@user_router.put("/{user_id}", response_model=UserResponse)
+@user_router.put(path="/{user_id}", response_model=UserResponse)
 async def update_user(
     user_id: int,
     user_data: UserUpdate,
     #_=UserDependency([cfg.UserRoles.ADMIN])  # noqa
 ) -> User:
-    user_dict = prepare_user_data(user_data)
+    user_dict = prepare_user_data(
+        user_data=user_data
+    )
     await UsersDAO.update_user(
         user_id=user_id,
         user_data=user_data,
         user_dict=user_dict
     )
-    return await UsersDAO.get(id=user_id)
+    return await UsersDAO.get(
+        id=user_id
+    )
 
 
-@user_router.get("/", response_model=UsersResponse)
+@user_router.get(path="/", response_model=UsersResponse)
 async def get_users(
-    page: int = Query(1, ge=1, description="Номер страницы"),
-    page_size: int = Query(-1, ge=-1, le=100, description="Количество на странице"),
-    query: Optional[str] = Query(None, description="Поиск по ФИО"),
-    role: Optional[str] = Query(None, description="Фильтр по роли"),
+    page: int = Query(
+        default=1,
+        ge=1,
+        description="Номер страницы"
+    ),
+    page_size: int = Query(
+        default=-1,
+        ge=-1,
+        le=100,
+        description="Количество на странице"
+    ),
+    query: Optional[str] = Query(
+        default=None,
+        description="Поиск по ФИО"
+    ),
+    role: Optional[str] = Query(
+        default=None,
+        description="Фильтр по роли"
+    ),
     alphabet_sort: Optional[bool] = Query(
-        True, description="True — по алфавиту, False — в обратном порядке"
+        default=True,
+        description="True — по алфавиту, False — в обратном порядке"
     )
 ) -> PagePaginate:
     return await UsersDAO.user_paginate(
@@ -61,13 +88,13 @@ async def get_users(
         page_size=page_size,
         include_nullable=False,
         search_query=query,
-        search_fields=['fio'],
+        search_fields=["fio"],
         role=role,
         alphabet_sort=alphabet_sort
     )
 
 
-@user_router.get("/{user_id}", response_model=UserResponse)
+@user_router.get(path="/{user_id}", response_model=UserResponse)
 async def get_user(
     user_id: int,
     #_=Depends(auth.is_admin_or_self)  # noqa
@@ -75,7 +102,7 @@ async def get_user(
     return await UsersDAO.get(id=user_id)
 
 
-@user_router.delete("/{user_id}", response_model=UserResponse)
+@user_router.delete(path="/{user_id}", response_model=UserResponse)
 async def delete_user(
     user_id: int,
     #_=UserDependency([cfg.UserRoles.ADMIN])  # noqa
@@ -86,15 +113,25 @@ async def delete_user(
 
 auth_router = APIRouter(prefix='/api/auth', tags=['Auth'])
 
-@auth_router.options("/login")
+@auth_router.options(path="/login")
 async def options_login() -> dict:
     return {}
 
-@auth_router.post("/login", response_model=LoginResponse)
+@auth_router.post(path="/login", response_model=LoginResponse)
 async def auth_user(
         user_data: UserAuth
 ) -> dict:
-    user = await UsersDAO.get_user_by_email(email=user_data.email)
-    auth.verify_password(plain_password=user_data.password, hashed_password=user.password)
-    access_token = auth.create_access_token({"sub": str(user.id)})
-    return {'id': user.id, 'access_token': access_token}
+    user = await UsersDAO.get_user_by_email(
+        email=user_data.email
+    )
+    auth.verify_password(
+        plain_password=user_data.password,
+        hashed_password=user.password
+    )
+    access_token = auth.create_access_token({
+        "sub": str(user.id)
+    })
+    return {
+        "id": user.id,
+        "access_token": access_token
+    }
