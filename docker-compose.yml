@@ -10,40 +10,37 @@ services:
       - PYTHONUNBUFFERED=1
       - PYTHONDONTWRITEBYTECODE=1
     volumes:
-      # Монтируем ensembles для доступа к моделям
-      - ./ensembles:/src/ensembles:ro
-      - ./data:/src/data:ro
-      # Для персистентности обученных моделей
-      - ./runs:/src/runs
+      - runs-data:/app/runs
     networks:
       - ensembles-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 10s
     restart: unless-stopped
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.streamlit
     container_name: ensembles-frontend
     ports:
-      - "3000:80"
-    depends_on:
-      - backend
+      - "8501:8501"
     environment:
-      - REACT_APP_API_URL=http://localhost:8000
+      - BASE_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
     networks:
       - ensembles-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 20s
+      start_period: 10s
     restart: unless-stopped
 
 networks:
@@ -51,5 +48,5 @@ networks:
     driver: bridge
 
 volumes:
-  runs:
+  runs-data:
     driver: local

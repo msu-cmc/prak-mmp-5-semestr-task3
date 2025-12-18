@@ -185,44 +185,195 @@ runs/
 
 ---
 
-## 4. Docker
+## 4. Docker (15/15 баллов — входит в веб-сервер)
 
-### docker-compose.yml
+### Архитектура Docker
 
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    docker-compose.yml                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌─────────────────────┐      ┌─────────────────────┐       │
+│  │  ensembles-backend  │      │  ensembles-frontend │       │
+│  │  (FastAPI)          │◄────►│  (Streamlit)        │       │
+│  │  Port: 8000         │      │  Port: 8501         │       │
+│  └─────────────────────┘      └─────────────────────┘       │
+│           │                            │                     │
+│           ▼                            │                     │
+│  ┌─────────────────────┐               │                     │
+│  │  runs-data (volume) │               │                     │
+│  │  Persistent storage │               │                     │
+│  └─────────────────────┘               │                     │
+│                                        │                     │
+│  ┌─────────────────────────────────────┘                     │
+│  │  ensembles-network (bridge)                               │
+│  └───────────────────────────────────────────────────────────┤
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Файлы Docker
+
+**`backend/Dockerfile`:**
+```dockerfile
+FROM python:3.12-slim
+
+# Install curl for healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl
+
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY backend/ml_app.py ./ml_app.py
+COPY backend/src ./src
+COPY ensembles ./ensembles
+
+EXPOSE 8000
+HEALTHCHECK CMD curl -f http://localhost:8000/health || exit 1
+CMD ["python", "ml_app.py"]
+```
+
+**`Dockerfile.streamlit`:**
+```dockerfile
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl
+
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ui.py ./ui.py
+COPY ensembles ./ensembles
+
+EXPOSE 8501
+HEALTHCHECK CMD curl -f http://localhost:8501/_stcore/health || exit 1
+CMD ["streamlit", "run", "ui.py", "--server.port=8501", "--server.address=0.0.0.0"]
+```
+
+**`docker-compose.yml`:**
 ```yaml
 services:
   backend:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: ensembles-backend
     ports:
       - "8000:8000"
     volumes:
-      - ./ensembles:/app/ensembles
-      - ./runs:/app/runs
+      - runs-data:/app/runs
+    networks:
+      - ensembles-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
 
   frontend:
-    build: ./frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: ensembles-frontend
     ports:
       - "8501:8501"
     environment:
       - BASE_URL=http://backend:8000
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    networks:
+      - ensembles-network
+    restart: unless-stopped
+
+networks:
+  ensembles-network:
+    driver: bridge
+
+volumes:
+  runs-data:
+    driver: local
 ```
 
-### Запуск
+### Команды Docker
 
 ```bash
-# Локально (разработка)
-# Terminal 1:
+# Сборка образов
+docker-compose build
+
+# Запуск в фоне
+docker-compose up -d
+
+# Проверка статуса
+docker-compose ps
+
+# Просмотр логов
+docker-compose logs -f
+
+# Логи конкретного сервиса
+docker-compose logs backend
+docker-compose logs frontend
+
+# Остановка
+docker-compose down
+
+# Остановка с удалением volumes
+docker-compose down -v
+
+# Пересборка и запуск
+docker-compose up -d --build
+```
+
+### Проверка работы
+
+```bash
+# Health check бэкенда
+curl http://localhost:8000/health
+# {"status":"ok"}
+
+# Health check фронтенда
+curl http://localhost:8501/_stcore/health
+# ok
+
+# Список экспериментов
+curl http://localhost:8000/existing_experiments/
+# {"experiment_names":[]}
+
+# Swagger документация
+open http://localhost:8000/docs
+```
+
+### Сетевое взаимодействие
+
+- **Frontend → Backend**: `http://backend:8000` (внутренняя сеть Docker)
+- **Browser → Frontend**: `http://localhost:8501`
+- **Browser → Backend API**: `http://localhost:8000`
+
+### Персистентность данных
+
+Volume `runs-data` сохраняет обученные модели между перезапусками:
+```
+runs-data/
+└── experiment_name/
+    ├── config.json
+    ├── train_data.csv
+    ├── convergence_history.json
+    └── model/
+```
+
+### Локальный запуск (без Docker)
+
+```bash
+# Terminal 1: Backend
 cd backend && python ml_app.py
 
-# Terminal 2:
+# Terminal 2: Frontend
 streamlit run ui.py
 
-# Docker
-docker-compose up --build
+# Открыть http://localhost:8501
 ```
 
 ---
