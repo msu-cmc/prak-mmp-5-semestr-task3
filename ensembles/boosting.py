@@ -228,7 +228,7 @@ class GradientBoostingMSE:
         with (Path(dirpath) / "params.json").open() as file:
             params = json.load(file)
         instance = cls(
-            n_esimators=params["n_estimators"],
+            n_estimators=params["n_estimators"],
             learning_rate=params["learning_rate"]
         )
 
