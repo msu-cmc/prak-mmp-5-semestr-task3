@@ -2,7 +2,7 @@
 
 ## Обзор
 
-Проект значительно расширен по сравнению с базовым заданием. Вместо минимального Streamlit интерфейса реализовано полноценное веб-приложение с React фронтендом и расширенным FastAPI бэкендом.
+Проект реализует полный цикл работы с ML ансамблями: от реализации алгоритмов до веб-интерфейса для обучения и инференса. Архитектура разделена на модули с чистым разделением ответственности.
 
 ---
 
@@ -13,7 +13,7 @@
 - Класс `RandomForestMSE` с полной реализацией
 - Bootstrap-сэмплирование для каждого дерева
 - Усреднение предсказаний всех деревьев
-- Поддержка параметров: `n_estimators`, `max_depth`, `max_features`, `random_state`
+- Поддержка параметров: `n_estimators`, `max_depth`, `max_features`
 - Методы `fit()`, `predict()`, `dump()`, `load()`
 - Отслеживание метрик обучения (RMSLE)
 - Поддержка early stopping с параметром `patience`
@@ -31,6 +31,7 @@
 
 - Функция `rmsle()` — Root Mean Squared Logarithmic Error
 - Функция `whether_to_stop()` — логика early stopping
+- TypedDict `ConvergenceHistory` для хранения истории обучения
 
 ---
 
@@ -71,19 +72,6 @@
 | Random Forest | ~$146,000 | 75 деревьев, depth=15 | ~7 сек |
 | Gradient Boosting | ~$142,000 | 100 деревьев, depth=5, lr=0.1 | ~4 сек |
 
-### Выводы
-
-**Random Forest:**
-- RMSE улучшается до 50-75 деревьев, затем стабилизируется
-- Оптимальная глубина: 10-15 (None приводит к переобучению)
-- Время растёт линейно с количеством деревьев
-
-**Gradient Boosting:**
-- Качество продолжает улучшаться с ростом числа деревьев
-- Оптимальная глубина: 3-7 (мелкие деревья лучше)
-- learning_rate 0.1-0.2 даёт лучший баланс
-- Более чувствителен к гиперпараметрам
-
 ### Графики (`experiments/plots/`)
 
 - `rf_n_estimators.png/svg` — RF: зависимость от числа деревьев
@@ -94,146 +82,147 @@
 
 ---
 
-## 3. Веб-сервер (15/15 баллов) — РАСШИРЕНО
+## 3. Веб-сервер (15/15 баллов)
 
-### Backend (FastAPI)
-
-**Технологии:**
-- FastAPI 0.123.0
-- SQLAlchemy 2.0 (async)
-- Pydantic 2.x
-- Gunicorn + Uvicorn
-- Alembic (миграции)
-
-**Реализованная архитектура:**
+### Архитектура
 
 ```
-backend/
-├── app.py                    # Главный файл FastAPI
-└── src/
-    ├── database/
-    │   ├── models.py         # SQLAlchemy модели
-    │   ├── base.py           # BaseDAO с CRUD операциями
-    │   ├── session_manager.py
-    │   └── db_error_handler.py
-    ├── users/
-    │   ├── router.py         # API endpoints
-    │   ├── dao.py            # Data Access Object
-    │   ├── schemas.py        # Pydantic schemas
-    │   └── utils.py
-    ├── schemas/
-    │   ├── authorization.py  # JWT авторизация
-    │   ├── config.py
-    │   └── base_schemas.py
-    ├── minio/                # S3/MinIO интеграция
-    └── alembic/              # Миграции БД
+┌─────────────────┐     HTTP      ┌─────────────────┐
+│   Streamlit     │◄────────────►│    FastAPI      │
+│    (ui.py)      │   REST API   │  (ml_app.py)    │
+└─────────────────┘              └────────┬────────┘
+                                          │
+                                          ▼
+                                 ┌─────────────────┐
+                                 │   ensembles/    │
+                                 │ RandomForestMSE │
+                                 │ GradientBoosting│
+                                 └────────┬────────┘
+                                          │
+                                          ▼
+                                 ┌─────────────────┐
+                                 │     runs/       │
+                                 │  (file storage) │
+                                 └─────────────────┘
 ```
 
-**API Endpoints:**
-- `POST /api/users/` — создание пользователя
-- `GET /api/users/` — список с пагинацией, поиском, фильтрацией
-- `GET /api/users/{id}` — получение пользователя
-- `PUT /api/users/{id}` — обновление
-- `DELETE /api/users/{id}` — удаление
-- `POST /api/auth/login` — авторизация
-
-**Модели БД:**
-- User, Parameter, Type, UserType
-- Session, Workout, WorkoutExercise
-- Exercise, ExerciseMuscle, ExerciseEquipment
-- Muscle, Equipment, Set
-- Chat, Message
-
-### Frontend (React) — РАСШИРЕНО
-
-**Технологии:**
-- React 18.2.0
-- Redux Toolkit
-- React Router DOM 6.x
-- Bootstrap 5 + Styled Components
-- Webpack 5 + TypeScript
-- Three.js + Web-IFC (3D визуализация)
+### Backend (`backend/`)
 
 **Структура:**
 
 ```
-frontend/src/
-├── app/                      # Root компонент
-│   ├── App.jsx
-│   └── providers/
-│       ├── StoreProvider/    # Redux store
-│       └── router/           # Роутинг
-├── adminView/
-│   ├── home/                 # Dashboard
-│   ├── projects/             # Управление проектами
-│   │   ├── pages/
-│   │   └── entities/         # ChatMessages, IFC Viewer
-│   └── users/                # Управление пользователями
-│       ├── pages/
-│       └── entities/
-├── authentication/           # Авторизация
-│   ├── pages/
-│   └── features/
-├── shared/
-│   ├── api/                  # API клиенты
-│   ├── components/           # UI компоненты
-│   ├── hooks/
-│   └── lib/
-└── states/                   # Redux slices
-    ├── LoggedUser/
-    ├── Users/
-    └── UI/
+backend/
+├── ml_app.py                     # FastAPI приложение для ML
+├── app.py                        # Полное приложение (с users/auth)
+└── src/
+    ├── experiments/              # ML эксперименты модуль
+    │   ├── __init__.py
+    │   ├── schemas.py            # Pydantic схемы
+    │   ├── service.py            # Бизнес-логика
+    │   └── router.py             # API endpoints
+    ├── users/                    # Пользователи (расширение)
+    ├── database/                 # SQLAlchemy (расширение)
+    └── schemas/                  # Общие схемы
 ```
 
+**API Endpoints (ML):**
+
+| Метод | Endpoint | Описание |
+|-------|----------|----------|
+| GET | `/existing_experiments/` | Список всех экспериментов |
+| POST | `/register_experiment/` | Создать эксперимент + загрузить данные |
+| GET | `/experiment_config/` | Получить конфигурацию эксперимента |
+| GET | `/needs_training` | Проверить, нужно ли обучение |
+| POST | `/train/` | Обучить модель |
+| GET | `/convergence_history/` | Получить кривые обучения |
+| POST | `/predict/` | Сделать предсказание |
+| GET | `/health` | Health check |
+
+**Технические требования (выполнены):**
+- ✅ FastAPI
+- ✅ Все ручки в подмодуле `router.py`
+- ✅ Все аргументы аннотированы (`Annotated[]`)
+- ✅ Возвращаемые значения аннотированы (`response_model`)
+
+### Frontend (Streamlit)
+
+**Файл:** `ui.py` (не модифицирован согласно заданию)
+
 **Функциональность:**
-- Авторизация и регистрация
-- Админ-панель с dashboard
-- Управление пользователями (CRUD)
-- Управление проектами
-- IFC 3D viewer для архитектурных файлов
-- Чат система
-- Responsive дизайн
+1. Создание нового эксперимента с выбором гиперпараметров
+2. Загрузка CSV датасета
+3. Обучение модели
+4. Просмотр кривых обучения (RMSLE)
+5. Инференс на новых данных
+
+### Связующие модули (`ensembles/`)
+
+**`ensembles/backend.py`:**
+- `ExperimentConfig` — Pydantic схема конфигурации эксперимента
+
+**`ensembles/frontend.py`:**
+- `Client` — HTTP клиент для общения с бэкендом
+- `plot_learning_curves()` — визуализация кривых обучения (Plotly)
+- `ConvergenceHistoryResponse` — модель ответа с историей
+
+### Хранение данных
+
+Эксперименты хранятся в файловой системе (`runs/`):
+
+```
+runs/
+└── experiment_name/
+    ├── config.json           # Конфигурация эксперимента
+    ├── train_data.csv        # Обучающие данные
+    ├── convergence_history.json  # История обучения
+    └── model/
+        ├── params.json       # Параметры модели
+        └── trees/
+            ├── tree_0000.joblib
+            ├── tree_0001.joblib
+            └── ...
+```
 
 ---
 
-## 4. Docker (входит в веб-сервер)
+## 4. Docker
 
 ### docker-compose.yml
 
 ```yaml
 services:
   backend:
-    - Port: 8000
-    - Health check: /docs
-    - Volumes: ensembles, data, runs
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ensembles:/app/ensembles
+      - ./runs:/app/runs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
 
   frontend:
-    - Port: 3000 (nginx)
-    - Multi-stage build
-    - Depends on: backend
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - BASE_URL=http://backend:8000
+    depends_on:
+      - backend
 ```
 
-### Dockerfiles
-
-**Backend:**
-- Base: python:3.12-slim
-- Poetry для зависимостей
-- Gunicorn для production
-
-**Frontend:**
-- Stage 1: node:20-alpine (build)
-- Stage 2: nginx:stable-alpine (serve)
-- Web-IFC WASM поддержка
-
-### Makefile
+### Запуск
 
 ```bash
-make up          # Запуск
-make down        # Остановка
-make logs        # Логи
-make rebuild     # Пересборка
-make health      # Проверка здоровья
-make shell-*     # Интерактивный shell
+# Локально (разработка)
+# Terminal 1:
+cd backend && python ml_app.py
+
+# Terminal 2:
+streamlit run ui.py
+
+# Docker
+docker-compose up --build
 ```
 
 ---
@@ -244,33 +233,38 @@ make shell-*     # Интерактивный shell
 
 ```
 prak-mmp-5-semestr-task3/
-├── ensembles/              # ML алгоритмы
-├── backend/                # FastAPI сервер
-├── frontend/               # React приложение
-├── data/                   # Датасеты
-├── experiments/            # Jupyter эксперименты
-├── docs/                   # Документация
-├── tests/                  # Тесты
+├── ensembles/                # ML алгоритмы
+│   ├── __init__.py
+│   ├── random_forest.py      # RandomForestMSE
+│   ├── boosting.py           # GradientBoostingMSE
+│   ├── utils.py              # RMSLE, early stopping
+│   ├── backend.py            # Схемы для ui.py
+│   └── frontend.py           # Клиент для ui.py
+├── backend/                  # FastAPI сервер
+│   ├── ml_app.py             # ML endpoints app
+│   ├── app.py                # Full app (users + ML)
+│   └── src/
+│       └── experiments/      # ML модуль
+├── frontend/                 # React приложение (расширение)
+├── data/                     # Датасеты
+├── experiments/              # Jupyter эксперименты
+├── runs/                     # Сохранённые эксперименты
+├── docs/                     # Документация
+├── tests/                    # Тесты
+├── ui.py                     # Streamlit интерфейс
+├── .env                      # Переменные окружения
 ├── docker-compose.yml
 ├── Makefile
 ├── pyproject.toml
 └── README.md
 ```
 
-### Документация
+### Переменные окружения
 
-- `README.md` — главная документация с инструкциями
-- `docs/DOCKER.md` — Docker setup guide
-- `docs/ENTITY_ARCHITECTURE.md` — архитектура бэкенда (930+ строк)
-- `docs/REPORT.md` — отчёт по экспериментам
-- `docs/QUICKSTART_DOCKER.md` — быстрый старт
-
-### Качество кода
-
-- Типизация (Pydantic, TypeScript)
-- Async/await паттерны
-- Модульная архитектура
-- DAO паттерн для работы с БД
+**`.env`:**
+```
+BASE_URL=http://localhost:8000
+```
 
 ---
 
@@ -286,22 +280,43 @@ prak-mmp-5-semestr-task3/
 |-------|-------------|-------------|--------|
 | Алгоритмы | Random Forest, Gradient Boosting | Полностью | ✅ |
 | Эксперименты | Исследование факторов | Полностью | ✅ |
-| Веб-сервер | FastAPI + Streamlit | FastAPI + React (расширено) | ✅+ |
+| Веб-сервер | FastAPI + Streamlit | Полностью | ✅ |
 | Docker | docker-compose | Полностью | ✅ |
-| Ведение проекта | README, структура | Расширенная документация | ✅ |
+| Ведение проекта | README, структура | Полностью | ✅ |
 | Бонус | Сравнение экспериментов | — | ❌ |
 
 **Базовые баллы: 50/50**
 
 ---
 
-## Расширения сверх задания
+## Как запустить
 
-1. **React вместо Streamlit** — полноценный SPA вместо простого интерфейса
-2. **SQLAlchemy + PostgreSQL** — реляционная БД вместо файлового хранения
-3. **JWT авторизация** — система аутентификации
-4. **Redux state management** — управление состоянием
-5. **3D IFC Viewer** — просмотр архитектурных файлов
-6. **MinIO интеграция** — S3-совместимое хранилище файлов
-7. **Alembic миграции** — версионирование схемы БД
-8. **Расширенная документация** — архитектурные гайды
+### Локально
+
+```bash
+# 1. Установить зависимости
+pip install -r requirements.txt
+
+# 2. Запустить бэкенд
+cd backend && python ml_app.py
+
+# 3. В другом терминале запустить фронтенд
+streamlit run ui.py
+
+# 4. Открыть http://localhost:8501
+```
+
+### Docker
+
+```bash
+docker-compose up --build
+# Открыть http://localhost:8501
+```
+
+---
+
+## API документация
+
+После запуска бэкенда доступна по адресу:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
