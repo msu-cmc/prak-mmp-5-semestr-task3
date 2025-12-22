@@ -1,57 +1,34 @@
-.PHONY: help build up down restart logs clean prune ps backend-logs frontend-logs
+.PHONY: help build up down restart logs clean ps
 
-help: ## Показать эту справку
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+help: ## Показать справку
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 build: ## Собрать Docker образы
 	docker-compose build
 
-up: ## Запустить все сервисы
+up: ## Запустить сервисы
 	docker-compose up -d
 	@echo "\n✅ Сервисы запущены:"
-	@echo "   Frontend: http://localhost:3000"
-	@echo "   Backend:  http://localhost:8000"
-	@echo "   API Docs: http://localhost:8000/docs"
+	@echo "   Frontend (Streamlit): http://localhost:8501"
+	@echo "   Backend API:          http://localhost:8000"
+	@echo "   Swagger Docs:         http://localhost:8000/docs"
 
-down: ## Остановить все сервисы
+down: ## Остановить сервисы
 	docker-compose down
 
-restart: down up ## Перезапустить все сервисы
+restart: down up ## Перезапустить
 
-logs: ## Показать логи всех сервисов
+logs: ## Логи всех сервисов
 	docker-compose logs -f
 
-backend-logs: ## Показать логи backend
-	docker-compose logs -f backend
-
-frontend-logs: ## Показать логи frontend
-	docker-compose logs -f frontend
-
-ps: ## Показать статус контейнеров
+ps: ## Статус контейнеров
 	docker-compose ps
 
-clean: down ## Остановить и удалить контейнеры, сети
+clean: ## Остановить и удалить volumes
 	docker-compose down -v
 
-prune: clean ## Полная очистка (включая образы)
-	docker-compose down -v --rmi all
+rebuild: clean build up ## Пересобрать
 
-rebuild: clean build up ## Пересобрать и запустить
-
-dev: ## Запустить в dev режиме с логами
-	docker-compose up --build
-
-shell-backend: ## Войти в shell backend контейнера
-	docker-compose exec backend /bin/sh
-
-shell-frontend: ## Войти в shell frontend контейнера
-	docker-compose exec frontend /bin/sh
-
-test-backend: ## Запустить тесты backend
-	docker-compose exec backend python -m pytest tests/
-
-health: ## Проверить здоровье сервисов
-	@echo "Backend health:"
-	@curl -f http://localhost:8000/docs > /dev/null 2>&1 && echo "  ✅ Backend is healthy" || echo "  ❌ Backend is down"
-	@echo "Frontend health:"
-	@curl -f http://localhost:3000 > /dev/null 2>&1 && echo "  ✅ Frontend is healthy" || echo "  ❌ Frontend is down"
+health: ## Проверить здоровье
+	@curl -sf http://localhost:8000/health && echo " Backend OK" || echo "Backend DOWN"
+	@curl -sf http://localhost:8501/_stcore/health && echo " Frontend OK" || echo "Frontend DOWN"

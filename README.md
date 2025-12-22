@@ -13,12 +13,22 @@
 ```bash
 # Запуск
 docker-compose up -d
+# или через Makefile
+make up
 
 # Проверка статуса
 docker-compose ps
+make ps
+
+# Проверка здоровья
+make health
+
+# Просмотр логов
+make logs
 
 # Остановка
 docker-compose down
+make down
 ```
 
 После запуска:
