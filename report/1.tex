@@ -4,10 +4,13 @@
 \usepackage[russian]{babel}
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{graphicx}
+\usepackage{svg}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{float}
 
 \geometry{margin=2.5cm}
 
@@ -26,6 +29,9 @@
 \begin{document}
 
 \maketitle
+
+\tableofcontents
+\newpage
 
 \section{Введение}
 
@@ -69,6 +75,235 @@
 \]
 где $\eta$ --- learning rate, $b_m(x)$ --- дерево, обученное на остатках $y - F_{m-1}(x)$.
 
+\section{Эксперименты}
+
+\subsection{Датасет}
+
+Использовался датасет \textbf{House Sales in King County, USA} --- данные о продажах недвижимости.
+
+\begin{itemize}
+    \item Размер датасета: 21613 объектов, 90 признаков (после предобработки)
+    \item Целевая переменная: \texttt{price} (цена дома)
+    \item Диапазон цен: от \$75,000 до \$7,700,000
+\end{itemize}
+
+\textbf{Предобработка данных:}
+\begin{itemize}
+    \item Извлечение признаков из даты (год, месяц, день)
+    \item One-hot encoding для zipcode (70 уникальных значений)
+    \item Удаление идентификаторов (\texttt{id}, \texttt{date})
+\end{itemize}
+
+\textbf{Разделение данных:}
+\begin{itemize}
+    \item Train: 13832 объектов (64\%)
+    \item Validation: 3458 объектов (16\%)
+    \item Test: 4323 объектов (20\%)
+\end{itemize}
+
+\subsection{Эксперименты с Random Forest}
+
+\subsubsection{Зависимость от количества деревьев}
+
+\begin{table}[H]
+\centering
+\caption{Random Forest: зависимость RMSE от количества деревьев}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{n\_estimators} & \textbf{RMSE (val)} & \textbf{RMSE (test)} & \textbf{Время (сек)} \\
+\hline
+5 & 135,054 & 170,508 & 0.33 \\
+10 & 131,174 & 159,078 & 0.66 \\
+20 & 130,160 & 157,400 & 1.37 \\
+30 & 126,733 & 156,623 & 1.98 \\
+50 & 127,742 & 155,760 & 3.27 \\
+75 & 127,153 & 152,283 & 5.17 \\
+100 & 127,121 & 153,623 & 6.53 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includesvg[width=\textwidth]{plots/rf_n_estimators.svg}
+\caption{Random Forest: RMSE и время обучения vs количество деревьев}
+\end{figure}
+
+\textbf{Вывод:} Увеличение количества деревьев улучшает качество, но рост замедляется после 50-75 деревьев. Время обучения растёт линейно.
+
+\subsubsection{Зависимость от максимальной глубины}
+
+\begin{table}[H]
+\centering
+\caption{Random Forest: зависимость RMSE от максимальной глубины}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{max\_depth} & \textbf{RMSE (val)} & \textbf{RMSE (test)} & \textbf{Время (сек)} \\
+\hline
+3 & 205,498 & 230,660 & 0.70 \\
+5 & 165,025 & 190,881 & 1.10 \\
+10 & 127,954 & 160,027 & 1.97 \\
+15 & 118,806 & 149,638 & 2.68 \\
+20 & 122,617 & 150,265 & 3.11 \\
+None & 124,106 & 155,718 & 3.26 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includesvg[width=\textwidth]{plots/rf_max_depth.svg}
+\caption{Random Forest: RMSE и время обучения vs максимальная глубина}
+\end{figure}
+
+\textbf{Вывод:} Оптимальная глубина деревьев --- 10-15. Неограниченная глубина (None) приводит к переобучению.
+
+\subsubsection{Зависимость от max\_features}
+
+\begin{table}[H]
+\centering
+\caption{Random Forest: зависимость RMSE от max\_features}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{max\_features} & \textbf{Доля} & \textbf{RMSE (val)} & \textbf{RMSE (test)} & \textbf{Время (сек)} \\
+\hline
+9 (sqrt) & 10\% & 153,260 & 178,218 & 0.50 \\
+22 & 24\% & 139,559 & 168,218 & 0.93 \\
+45 & 50\% & 131,505 & 155,031 & 1.76 \\
+90 (all) & 100\% & 127,829 & 157,079 & 3.34 \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Вывод:} Использование всех признаков даёт лучшее качество на валидации, но 50\% признаков обеспечивает лучшую генерализацию на тесте при меньшем времени обучения.
+
+\subsection{Эксперименты с Gradient Boosting}
+
+\subsubsection{Зависимость от количества деревьев}
+
+\begin{table}[H]
+\centering
+\caption{Gradient Boosting: зависимость RMSE от количества деревьев}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{n\_estimators} & \textbf{RMSE (val)} & \textbf{RMSE (test)} & \textbf{Время (сек)} \\
+\hline
+10 & 221,208 & 248,028 & 0.23 \\
+20 & 173,331 & 194,330 & 0.45 \\
+30 & 152,223 & 171,298 & 0.71 \\
+50 & 133,175 & 152,932 & 1.19 \\
+75 & 125,540 & 145,145 & 1.79 \\
+100 & 121,154 & 140,531 & 2.39 \\
+150 & 116,847 & 135,827 & 3.63 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includesvg[width=\textwidth]{plots/gb_n_estimators.svg}
+\caption{Gradient Boosting: RMSE и время обучения vs количество деревьев}
+\end{figure}
+
+\textbf{Вывод:} Gradient Boosting более чувствителен к количеству деревьев --- качество продолжает улучшаться даже при 150 деревьях.
+
+\subsubsection{Зависимость от максимальной глубины}
+
+\begin{table}[H]
+\centering
+\caption{Gradient Boosting: зависимость RMSE от максимальной глубины}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{max\_depth} & \textbf{RMSE (val)} & \textbf{RMSE (test)} & \textbf{Время (сек)} \\
+\hline
+2 & 155,082 & 181,875 & 0.81 \\
+3 & 133,175 & 152,932 & 1.17 \\
+5 & 116,550 & 145,765 & 1.89 \\
+7 & 115,900 & 139,932 & 2.60 \\
+10 & 116,442 & 146,441 & 3.71 \\
+None & 161,434 & 198,069 & 6.71 \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Вывод:} Оптимальная глубина базовых деревьев --- 5-7. В отличие от Random Forest, неограниченная глубина сильно ухудшает качество из-за переобучения на каждом шаге.
+
+\subsubsection{Зависимость от learning rate}
+
+\begin{table}[H]
+\centering
+\caption{Gradient Boosting: зависимость RMSE от learning rate}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{learning\_rate} & \textbf{RMSE (val)} & \textbf{RMSE (test)} & \textbf{Время (сек)} \\
+\hline
+0.01 & 268,341 & 301,634 & 1.19 \\
+0.05 & 161,282 & 182,117 & 1.14 \\
+0.10 & 133,175 & 152,932 & 1.15 \\
+0.20 & 123,159 & 144,301 & 1.14 \\
+0.30 & 119,960 & 150,495 & 1.16 \\
+0.50 & 128,727 & 149,342 & 1.15 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includesvg[width=\textwidth]{plots/gb_learning_rate.svg}
+\caption{Gradient Boosting: RMSE vs Learning Rate}
+\end{figure}
+
+\textbf{Вывод:} Оптимальный learning rate --- 0.1-0.2. Слишком маленькие значения требуют больше деревьев, слишком большие (>0.3) приводят к переобучению.
+
+\subsection{Итоговое сравнение моделей}
+
+\begin{table}[H]
+\centering
+\caption{Сравнение лучших конфигураций моделей}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Модель} & \textbf{RMSE (test)} & \textbf{Время обучения (сек)} \\
+\hline
+Random Forest (n=75, depth=15) & 146,370 & 6.89 \\
+Gradient Boosting (n=100, depth=5, lr=0.1) & 141,838 & 3.88 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includesvg[width=\textwidth]{plots/comparison_predictions.svg}
+\caption{Сравнение предсказаний Random Forest и Gradient Boosting}
+\end{figure}
+
+\subsection{Выводы из экспериментов}
+
+\textbf{Random Forest:}
+\begin{itemize}
+    \item Увеличение количества деревьев улучшает качество, но рост замедляется после 50-75 деревьев
+    \item Оптимальная глубина деревьев: 10-15
+    \item Время обучения растёт линейно с количеством деревьев
+    \item Неограниченная глубина приводит к переобучению
+    \item Менее чувствителен к гиперпараметрам
+\end{itemize}
+
+\textbf{Gradient Boosting:}
+\begin{itemize}
+    \item Более чувствителен к количеству деревьев --- качество продолжает улучшаться дольше
+    \item Оптимальная глубина базовых деревьев: 3-7 (значительно меньше, чем у RF)
+    \item Learning rate 0.1-0.2 обеспечивает хороший баланс между качеством и скоростью
+    \item Слишком большой learning rate (>0.3) ухудшает качество
+    \item При правильной настройке показывает лучшее качество
+\end{itemize}
+
+\textbf{Общие выводы:}
+\begin{itemize}
+    \item Gradient Boosting показал лучший результат (RMSE = 141,838 vs 146,370)
+    \item Gradient Boosting обучается быстрее при оптимальных параметрах
+    \item Random Forest более устойчив к выбору гиперпараметров
+    \item Оба алгоритма хорошо справляются с задачей предсказания цен на недвижимость
+\end{itemize}
+
 \section{Веб-сервер}
 
 \subsection{Архитектура}
@@ -84,7 +319,7 @@
 
 Реализованы следующие эндпоинты:
 
-\begin{table}[h]
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|}
 \hline
@@ -160,11 +395,12 @@ make up
 В ходе работы были успешно реализованы:
 \begin{itemize}
     \item Алгоритмы Random Forest и Gradient Boosting с поддержкой early stopping
+    \item Проведены эксперименты на датасете House Sales in King County
     \item REST API на FastAPI с полной документацией (Swagger UI)
     \item Веб-интерфейс на Streamlit для работы без знания Python
     \item Docker-контейнеризация для простого развёртывания
 \end{itemize}
 
-Система позволяет пользователям без навыков программирования обучать модели машинного обучения и делать предсказания через удобный веб-интерфейс.
+Gradient Boosting показал лучшее качество предсказания (RMSE = 141,838) при меньшем времени обучения. Система позволяет пользователям без навыков программирования обучать модели машинного обучения и делать предсказания через удобный веб-интерфейс.
 
 \end{document}
